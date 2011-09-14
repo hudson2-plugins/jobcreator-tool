@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : newXMLDocument.xml
+    Created on : September 13, 2011, 9:11 PM
+    Author     : henrik
+    Description:
+        Purpose of the document follows.
+-->
+
+<ns1:pipeline  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+   xmlns:ns1='hudsonci.jobcreator.v1'
+   xsi:schemaLocation='hudsonci.jobcreator.v1 file:/mnt/nas/data/source-code/hudson-jobcreator/target/schemas/jobcreator-v1.xsd'>
+  <name>example</name>
+  <environments>
+    <environment>
+      <name>dev-group</name>
+      <outputPattern>${pipeline}_${environment}_${job}</outputPattern>
+      <include>
+        <job>job1</job>
+      </include>
+      <properties>
+        <name>global</name>
+        <property name="my.property" >value1</property>
+        <property name="my.second">value2</property>
+      </properties>
+    </environment>
+    <environment>
+      <name>dev1</name>
+      <inherit>
+        <environment>dev-group</environment>
+      </inherit>
+      <include>
+        <job>job2</job>
+      </include>
+      <properties>
+        <name>global</name>
+        <property name="env2-dsds" >dsdsad</property>
+      </properties>
+      <properties>
+        <name>job2</name>
+        <property name="env2-job-dsds" >dsdsad</property>
+      </properties>      
+    </environment>
+  </environments>
+  <jobs>
+    <job>
+      <name>job1</name>
+      <template>template1.ftl</template>
+      <downstream>
+        <job>job2</job>
+      </downstream>
+      <join></join>
+      <properties>
+        <property name="job-spec">myjob</property>
+      </properties>
+    </job>
+    <job>
+      <name>job2</name>
+      <template>template1.ftl</template>
+      <upstream>
+        <job>job1</job>
+      </upstream>
+    </job>
+  </jobs>
+</ns1:pipeline>
