@@ -24,7 +24,7 @@ public class Program {
 
   private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-  public static void main(String[] args) throws ParserConfigurationException, IOException, TemplateException {
+  public static void main(String[] args) throws ParserConfigurationException, IOException, TemplateException,Exception {
 
     Arguments arguments = new Arguments();
     CmdLineParser parser = new CmdLineParser(arguments);

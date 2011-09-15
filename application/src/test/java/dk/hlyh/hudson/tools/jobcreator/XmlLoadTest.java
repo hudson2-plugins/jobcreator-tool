@@ -10,12 +10,40 @@
  */
 package dk.hlyh.hudson.tools.jobcreator;
 
+import dk.hlyh.hudson.tools.jobcreator.schema.v1.Pipeline;
+import java.io.File;
+import java.net.URL;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class XmlLoadTest {
+
+  @Test
+  public void loadValidFile() throws ImportException {
+    URL resource = this.getClass().getResource("/xmlloadertest/valid.xml");
+    XmlHandler handler = new XmlHandler();
+    Assert.assertNotNull(handler.loadPipeline(new File(resource.getFile())));
+  }
+
+  @Test(expectedExceptions=ImportException.class)
+  public void loadInvalidFile()  throws ImportException{
+    URL resource = this.getClass().getResource("/xmlloadertest/invalid.xml");
+    XmlHandler handler = new XmlHandler();
+    Pipeline loadPipeline = handler.loadPipeline(new File(resource.getFile()));
+  }
+  
+  @Test(expectedExceptions=IllegalArgumentException.class)
+  public void loadNullFile()  throws ImportException{
     
-    @Test
-    public void loadValidEmpty() {
-        
-    }    
+    XmlHandler handler = new XmlHandler();
+    Pipeline loadPipeline = handler.loadPipeline(null);
+  }
+  
+  @Test(expectedExceptions=ImportException.class)
+  public void loadNonExistingFile()  throws ImportException{
+    
+    XmlHandler handler = new XmlHandler();
+    Pipeline loadPipeline = handler.loadPipeline(new File("notthere.xsd"));
+  }    
+  
 }

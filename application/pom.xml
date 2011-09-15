@@ -35,6 +35,11 @@
   </licenses>
                 
   <build>
+    <resources>
+      <resource>
+        <directory>target/schemas</directory>
+      </resource>
+    </resources>    
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
