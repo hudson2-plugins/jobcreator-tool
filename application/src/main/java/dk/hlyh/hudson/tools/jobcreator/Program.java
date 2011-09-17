@@ -27,8 +27,8 @@ public class Program {
   private Program() {
     super();
   }
-  
-  public static void main(String[] args) throws ParserConfigurationException, IOException, TemplateException, Exception {
+
+  public static void main(String[] args) {
 
     Arguments arguments = new Arguments();
     CmdLineParser parser = new CmdLineParser(arguments);
@@ -38,15 +38,18 @@ public class Program {
       for (Handler handler : Logger.getLogger("").getHandlers()) {
         handler.setFormatter(new LogFormatter());
       }
-    } catch (CmdLineException e) {
+      XmlHandler xmlHandler = new XmlHandler();
+      Pipeline pipeline = xmlHandler.loadPipeline(arguments.getPipeline());
+      Resolver resolver = new Resolver(arguments, pipeline);
+      resolver.resolve();
 
+    } catch (CmdLineException e) {
       System.err.println(e.getMessage());
       parser.printUsage(System.err);
       return;
+    } catch (ImportException e) {      
+      System.err.println("Import aborted: "+ e.getMessage());
+      System.exit(-1);      
     }
-    XmlHandler xmlHandler = new XmlHandler();
-    Pipeline pipeline = xmlHandler.loadPipeline(arguments.getPipeline());
-    Resolver resolver = new Resolver(arguments, pipeline);
-    resolver.resolve();
   }
 }

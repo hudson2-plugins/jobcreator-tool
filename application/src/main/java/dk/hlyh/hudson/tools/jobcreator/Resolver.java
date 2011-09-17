@@ -10,6 +10,7 @@
  */
 package dk.hlyh.hudson.tools.jobcreator;
 
+import dk.hlyh.hudson.tools.jobcreator.helper.FreemarkerHelper;
 import dk.hlyh.hudson.tools.jobcreator.helper.HierarchyWalker;
 import dk.hlyh.hudson.tools.jobcreator.helper.IncludedJobsVisitor;
 import dk.hlyh.hudson.tools.jobcreator.helper.ResolvePropertyVisitor;
@@ -19,20 +20,12 @@ import dk.hlyh.hudson.tools.jobcreator.schema.v1.Job;
 import dk.hlyh.hudson.tools.jobcreator.schema.v1.Pipeline;
 import dk.hlyh.hudson.tools.jobcreator.schema.v1.Propagation;
 import dk.hlyh.hudson.tools.jobcreator.schema.v1.Property;
-import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Resolver {
@@ -52,20 +45,22 @@ public class Resolver {
     this.pipeline = pipeline;
   }
 
-  public void resolve() throws IOException, TemplateException, ImportException {
-
+  public void resolve() throws ImportException {
+    
+    FreemarkerHelper.setupFreemarker(arguments.getTemplateDirectory());
+    
     // Find the active environment
     Environment activeEnvironment = findEnvironment();
     if (activeEnvironment == null) {
       return;
     }
-    LOGGER.info("Active environment: " + activeEnvironment);
+    LOGGER.log(Level.INFO, "Active environment: {0}", activeEnvironment);
 
     // get The list of jobs
     IncludedJobsVisitor includedJobsVisitor = new IncludedJobsVisitor();
     HierarchyWalker.walkEnvironments(activeEnvironment, includedJobsVisitor);
     Set<Job> jobs = includedJobsVisitor.getJobs();
-    LOGGER.info("Jobs to build: " + jobs);
+    LOGGER.log(Level.INFO, "Jobs to build: {0}", jobs);
 
     // build the environment properties
     ResolvePropertyVisitor environmentPropertyVisitor = new ResolvePropertyVisitor(activeEnvironment);
@@ -74,7 +69,6 @@ public class Resolver {
 
     // loop all jobs and set initial properties
     for (Job job : jobs) {
-      LOGGER.info("Resolving job: " + job);
       ResolvePropertyVisitor visitor = new ResolvePropertyVisitor(job);
       HierarchyWalker.walkJobs(job, visitor);
       job.getUpstreamJobs().retainAll(jobs);
@@ -88,11 +82,9 @@ public class Resolver {
       Map<String, Property> jobSpecificSet = activeEnvironment.getResolvesProperties().get(job.getName());
       Map<String, Property> currentSet = job.getResolvedProperties();
       if (globalSet != null) {
-        LOGGER.info("Applying global environment properties to " + job);
         mergePropertySet(globalSet, currentSet);
       }
       if (jobSpecificSet != null) {
-        LOGGER.info("Applying job specific environment properties to " + job);
         mergePropertySet(jobSpecificSet, currentSet);
       }
     }
@@ -113,7 +105,7 @@ public class Resolver {
 
     // Loop all jobs and and build the template model
     for (Job job : jobs) {
-      LOGGER.info("Processing job: " + job);
+      
       TemplateValuesBuilder builder = new TemplateValuesBuilder();
       builder.setProperty("import.pipeline.name", pipeline.getName());
       builder.setProperty("import.env.name", arguments.getEnvironment());
@@ -124,25 +116,8 @@ public class Resolver {
         builder.setProperty(property.getName(), property.getValue());
       }
 
-      // merge with template
-      String outputName = activeEnvironment.getResolvesOutputPattern();
-      outputName = outputName.replace("${environment}", activeEnvironment.getName());
-      outputName = outputName.replace("${pipeline}", pipeline.getName());
-      outputName = outputName.replace("${job}", job.getName());
-      File jobDirectory = new File(arguments.getOutputDirectory(), outputName);
-      if (!jobDirectory.exists()) {
-        jobDirectory.mkdir();
-      }
-      File configXml = new File(jobDirectory, "config.xml");
-
-      // merge with template
-      Configuration cfg = setupFreemarker();
-
-      Template template = cfg.getTemplate(job.getResolvedTemplate());
-      Writer out = new OutputStreamWriter(new FileOutputStream(configXml));
-      template.process(builder.getValues(), out);
-      System.out.println("Completed  job: " + job.getName());
-      out.close();
+      FreemarkerHelper.writeJob(arguments.getOutputDirectory(), job, activeEnvironment, builder, pipeline);
+      LOGGER.log(Level.INFO, "Completed job: {0}", job);
     }
   }
 
@@ -257,10 +232,4 @@ public class Resolver {
     return sb.toString();
   }
 
-  private Configuration setupFreemarker() throws IOException {
-    Configuration cfg = new Configuration();
-    cfg.setDirectoryForTemplateLoading(arguments.getTemplateDirectory());
-    cfg.setObjectWrapper(new DefaultObjectWrapper());
-    return cfg;
-  }
 }
