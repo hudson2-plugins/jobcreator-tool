@@ -10,6 +10,7 @@
  */
 package dk.hlyh.hudson.tools.jobcreator.helper;
 
+import dk.hlyh.hudson.tools.jobcreator.ImportException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -23,13 +24,31 @@ public class TemplateValuesBuilder {
     values = new HashMap<String, Object>();
   }
 
-  public void setProperty(String key, String value) {
+  public void setProperty(String key, String value) throws ImportException{
     LOGGER.info("Setting property '" + key + "' , '" + value + "'");
+
+    // simple Validations
+    if (key == null || key.trim().length() == 0) {
+      throw new ImportException("Key cannot be empty");
+    }
+    if (key.contains(" ")) {
+      throw new ImportException("Key cannot contain spaces");
+    }
+    if (key.contains("..")) {
+      throw new ImportException("Key cannot contain empty parts");
+    }    
+    if (key.endsWith(".")) {
+      throw new ImportException("Key cannot end in '.'");
+    }
+    
     String[] keyParts = key.split("\\.");
+    String resolvedKey=null;
 
     Map<String, Object> currentMap = values;
     for (int i = 0; i < keyParts.length; i++) {
       String part = keyParts[i];
+
+      resolvedKey = resolvedKey == null ? part: resolvedKey+"."+part;
 
       // if this is not the last part
       if (i + 1 != keyParts.length) {
@@ -43,9 +62,12 @@ public class TemplateValuesBuilder {
         } else if (mapContent instanceof Map) {
           currentMap = (Map<String, Object>) mapContent;
         } else {
-          throw new RuntimeException("Child is not map");
+          throw new ImportException("The property '" + resolvedKey+"' has previously been set, so cannot be used as parent in '" +key+"'");
         }
       } else {
+        if (currentMap.containsKey(part) && !(currentMap.get(part) instanceof String)) {
+          throw new ImportException("The property '" + key+"' has previously been used as a parent, so cannot be used as simple property");
+        }
         currentMap.put(part, value);
       }
     }
@@ -55,39 +77,4 @@ public class TemplateValuesBuilder {
   public Map getValues() {
     return values;
   }
-
-  /*  public static void mergeMaps(Map<String, Object> original, Map<String, Object> addition) {
-  if (addition == null) {
-  return;
-  }
-  for (Map.Entry<String, Object> additionEntry : addition.entrySet()) {
-  
-  String additionKey = additionEntry.getKey();
-  Object additionValue = additionEntry.getValue();
-  Object originalValue = original.get(additionKey);
-  // make type check
-  if (originalValue != null) {
-  if (!(additionValue instanceof String || additionValue instanceof Map)) {
-  throw new IllegalStateException("Error in config addition=" + additionValue.getClass());
-  }
-  if (additionValue instanceof String && !(originalValue instanceof String)) {
-  throw new IllegalStateException("Error in config original class=" + originalValue.getClass() + " value=" + originalValue + ", addition class=" + additionValue.getClass() + ", value=" + additionValue);
-  }
-  if (additionValue instanceof Map && !(originalValue instanceof Map)) {
-  throw new IllegalStateException("Error in config original=" + originalValue.getClass() + ", addition=" + additionValue.getClass());
-  }
-  }
-  
-  
-  if (additionValue instanceof String) {
-  original.put(additionKey, additionValue);
-  } else {
-  if (originalValue == null) {
-  originalValue = new HashMap<String, Object>();
-  original.put(additionKey, originalValue);
-  }
-  mergeMaps((Map<String, Object>) originalValue, (Map<String, Object>) additionValue);
-  }
-  }
-  }*/
 }
