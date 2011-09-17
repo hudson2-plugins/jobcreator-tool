@@ -22,32 +22,43 @@ public class Job {
   @XmlID
   @XmlElement(required = true)
   private String name;
+  
   @XmlElement(required = true)
   private String template;
+  
   @XmlElementWrapper(name = "inherit")
   @XmlElement(name = "job")
-  @XmlIDREF  
+  @XmlIDREF
   private Set<Job> parentJobs;
+  
   @XmlElementWrapper(name = "upstream")
   @XmlElement(name = "job")
   @XmlIDREF
   private Set<Job> upstreamJobs;
+  
   @XmlElementWrapper(name = "downstream")
   @XmlElement(name = "job")
   @XmlIDREF
   private Set<Job> downstreamJobs;
+  
   @XmlElement(name = "join")
   @XmlIDREF
   private Job joinJob;
+  
   @XmlElementWrapper(name = "properties")
   @XmlElement(name = "property")
   private Set<Property> properties;
   
   @XmlTransient
   private Map<String, Property> resolvedProperties;
-
-  @XmlTransient String resolvedTemplate;
   
+  @XmlTransient
+  private String resolvedTemplate;
+
+  public Job() {
+    super();
+  }
+
   public String getName() {
     return name;
   }
@@ -97,7 +108,7 @@ public class Job {
   }
 
   public Map<String, Property> getResolvedProperties() {
-    if(resolvedProperties == null) {
+    if (resolvedProperties == null) {
       resolvedProperties = new HashMap<String, Property>();
     }
     return resolvedProperties;
@@ -110,8 +121,6 @@ public class Job {
   public void setResolvedTemplate(String resolvedTemplate) {
     this.resolvedTemplate = resolvedTemplate;
   }
-  
-  
 
   @Override
   public boolean equals(Object obj) {
@@ -137,6 +146,6 @@ public class Job {
 
   @Override
   public String toString() {
-    return  name;
+    return name;
   }
 }

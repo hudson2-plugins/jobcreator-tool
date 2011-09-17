@@ -18,6 +18,10 @@ public class LogFormatter extends java.util.logging.Formatter {
 
   private static final String lineSep = System.getProperty("line.separator");
 
+  public LogFormatter() {
+    super();
+  }  
+  
   @Override
   public String format(LogRecord record) {
     StringBuilder sb = new StringBuilder();

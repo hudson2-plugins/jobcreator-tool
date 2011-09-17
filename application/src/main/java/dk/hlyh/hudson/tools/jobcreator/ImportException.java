@@ -10,10 +10,7 @@
  */
 package dk.hlyh.hudson.tools.jobcreator;
 
-/**
- * @author henrik
- */
-public class ImportException extends Exception{
+public class ImportException extends Exception {
 
   public ImportException(String message, Throwable cause) {
     super(message, cause);
@@ -22,5 +19,4 @@ public class ImportException extends Exception{
   public ImportException(String message) {
     super(message);
   }
-  
 }

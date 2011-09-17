@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlType(name = "job-property")
 public class Property {
 
-  @XmlValue()
+  @XmlValue
   private String value;
   
   @XmlAttribute(name = "name", required = true)

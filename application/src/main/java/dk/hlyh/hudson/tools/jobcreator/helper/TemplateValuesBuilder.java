@@ -24,7 +24,7 @@ public class TemplateValuesBuilder {
     values = new HashMap<String, Object>();
   }
 
-  public void setProperty(String key, String value) throws ImportException{
+  public void setProperty(String key, String value) throws ImportException {
     LOGGER.info("Setting property '" + key + "' , '" + value + "'");
 
     // simple Validations
@@ -36,19 +36,19 @@ public class TemplateValuesBuilder {
     }
     if (key.contains("..")) {
       throw new ImportException("Key cannot contain empty parts");
-    }    
+    }
     if (key.endsWith(".")) {
       throw new ImportException("Key cannot end in '.'");
     }
-    
+
     String[] keyParts = key.split("\\.");
-    String resolvedKey=null;
+    String resolvedKey = null;
 
     Map<String, Object> currentMap = values;
     for (int i = 0; i < keyParts.length; i++) {
       String part = keyParts[i];
 
-      resolvedKey = resolvedKey == null ? part: resolvedKey+"."+part;
+      resolvedKey = resolvedKey == null ? part : resolvedKey + "." + part;
 
       // if this is not the last part
       if (i + 1 != keyParts.length) {
@@ -62,11 +62,11 @@ public class TemplateValuesBuilder {
         } else if (mapContent instanceof Map) {
           currentMap = (Map<String, Object>) mapContent;
         } else {
-          throw new ImportException("The property '" + resolvedKey+"' has previously been set, so cannot be used as parent in '" +key+"'");
+          throw new ImportException("The property '" + resolvedKey + "' has previously been set, so cannot be used as parent in '" + key + "'");
         }
       } else {
         if (currentMap.containsKey(part) && !(currentMap.get(part) instanceof String)) {
-          throw new ImportException("The property '" + key+"' has previously been used as a parent, so cannot be used as simple property");
+          throw new ImportException("The property '" + key + "' has previously been used as a parent, so cannot be used as simple property");
         }
         currentMap.put(part, value);
       }

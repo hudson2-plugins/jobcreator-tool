@@ -15,29 +15,26 @@ import dk.hlyh.hudson.tools.jobcreator.schema.v1.Job;
 import java.util.HashSet;
 import java.util.Set;
 
-public class IncludedJobsVisitor implements Visitor{
+public class IncludedJobsVisitor implements Visitor {
 
   private final Set<Job> jobs;
+
   public IncludedJobsVisitor() {
     jobs = new HashSet<Job>();
   }
 
-  
   @Override
   public void visitEnvironment(Environment environment) {
     jobs.addAll(environment.getIncludedJobs());
-    jobs.removeAll(environment.getExcludedJobs());    
+    jobs.removeAll(environment.getExcludedJobs());
   }
 
   @Override
   public void visitJob(Job currentJob) {
     throw new UnsupportedOperationException("Not supported yet.");
   }
-  
+
   public Set<Job> getJobs() {
     return jobs;
   }
-  
-  
-  
 }

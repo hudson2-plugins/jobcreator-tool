@@ -14,42 +14,43 @@ import java.io.File;
 import org.kohsuke.args4j.Option;
 
 public class Arguments {
-    
-    @Option(name="--pipeline",required=true,usage="Which xml file to use for pipeline definition")
-    private File pipeline;
 
-    @Option(name="--template",required=true,usage="directory containing the templates")
-    private File templateDirectory;
-        
-    @Option(name="--output",required=true,usage="output directory")
-    private File outputDirectory;
+  @Option(name = "--pipeline", required = true, usage = "Which xml file to use for pipeline definition")
+  private File pipeline;
+  
+  @Option(name = "--template", required = true, usage = "directory containing the templates")
+  private File templateDirectory;
+  
+  @Option(name = "--output", required = true, usage = "output directory")
+  private File outputDirectory;
+  
+  @Option(name = "--environment", required = true, usage = "environemnt to load")
+  private String environment;
+  
+  @Option(name = "--override", required = false, usage = "Personal override file")
+  private File overrideFile;
 
-    @Option(name="--environment",required=true,usage="environemnt to load")
-    private String environment;
-    
-    @Option(name="--override",required=false,usage="Personal override file")
-    private File overrideFile;
-         
-    public String getEnvironment() {
-        return environment;
-    }
+  public Arguments() {
+    super();
+  }
 
-    public File getOutputDirectory() {
-        return outputDirectory;
-    }
+  public String getEnvironment() {
+    return environment;
+  }
 
-    public File getOverrideFile() {
-        return overrideFile;
-    }
+  public File getOutputDirectory() {
+    return outputDirectory;
+  }
 
-    public File getPipeline() {
-        return pipeline;
-    }
+  public File getOverrideFile() {
+    return overrideFile;
+  }
 
-    public File getTemplateDirectory() {
-        return templateDirectory;
-    }
-    
-    
+  public File getPipeline() {
+    return pipeline;
+  }
+
+  public File getTemplateDirectory() {
+    return templateDirectory;
+  }
 }
-            

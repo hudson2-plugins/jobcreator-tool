@@ -18,18 +18,18 @@ public final class HierarchyWalker {
   private HierarchyWalker() {
     super();
   }
-    
-  public static void walkJobs(Job job,Visitor visitor) {
+
+  public static void walkJobs(Job job, Visitor visitor) {
     for (Job parent : job.getParentJobs()) {
-      walkJobs(parent,visitor);
+      walkJobs(parent, visitor);
     }
     visitor.visitJob(job);
   }
 
-  public static void walkEnvironments(Environment environment,Visitor visitor) {
+  public static void walkEnvironments(Environment environment, Visitor visitor) {
     for (Environment parent : environment.getParentEnv()) {
-      walkEnvironments(parent,visitor);
+      walkEnvironments(parent, visitor);
     }
-    visitor.visitEnvironment(environment);    
-  }    
+    visitor.visitEnvironment(environment);
+  }
 }

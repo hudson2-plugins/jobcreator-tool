@@ -28,7 +28,7 @@ public class Environment {
   @XmlElement(required = true)
   private String name;
   
-  @XmlElement()
+  @XmlElement
   private String outputPattern;
   
   @XmlElementWrapper(name = "inherit")
@@ -53,8 +53,12 @@ public class Environment {
   private Map<String, Map<String,Property> > resolvesProperties;
   
   @XmlTransient
-  private String resolvesOutputPattern;  
+  private String resolvesOutputPattern;
 
+  public Environment() {
+    super();
+  }
+  
   public String getName() {
     return name;
   }

@@ -39,7 +39,7 @@ public class ResolvePropertyVisitor implements Visitor {
     for (Property currentProperty : currentJob.getProperties()) {
       activeJob.getResolvedProperties().put(currentProperty.getName(), currentProperty);
     }
-    if (currentJob.getTemplate() != null && currentJob.getTemplate().trim().length()>0 ) {
+    if (currentJob.getTemplate() != null && currentJob.getTemplate().trim().length() > 0) {
       activeJob.setResolvedTemplate(currentJob.getTemplate());
     }
   }
@@ -47,22 +47,22 @@ public class ResolvePropertyVisitor implements Visitor {
   @Override
   public void visitEnvironment(Environment environment) {
     Map<String, Map<String, Property>> resolvesPropertysets = activeEnvironment.getResolvesProperties();
-    
+
     for (PropertySet currentPropertySet : environment.getProperties()) {
-      
+
       Map<String, Property> resolvedPropertySet = resolvesPropertysets.get(currentPropertySet.getName());
       if (resolvedPropertySet == null) {
         resolvedPropertySet = new HashMap<String, Property>();
         resolvesPropertysets.put(currentPropertySet.getName(), resolvedPropertySet);
       }
-      
-      for (Property currentProperty :  currentPropertySet.getProperties()) {
+
+      for (Property currentProperty : currentPropertySet.getProperties()) {
         resolvedPropertySet.put(currentProperty.getName(), currentProperty);
       }
-      
-      if (environment.getOutputPattern() != null && environment.getOutputPattern().trim().length() > 0 ) {
+
+      if (environment.getOutputPattern() != null && environment.getOutputPattern().trim().length() > 0) {
         activeEnvironment.setResolvesOutputPattern(environment.getOutputPattern());
       }
-    }    
+    }
   }
 }

@@ -52,7 +52,7 @@ public class Resolver {
     this.pipeline = pipeline;
   }
 
-  public void resolve() throws IOException, TemplateException,ImportException {
+  public void resolve() throws IOException, TemplateException, ImportException {
 
     // Find the active environment
     Environment activeEnvironment = findEnvironment();

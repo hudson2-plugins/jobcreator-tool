@@ -23,6 +23,12 @@ public class PropertySet {
   @XmlElement(name = "property")
   private Set<Property> properties;
 
+  public PropertySet() {
+    super();
+  }
+
+  
+  
   public String getName() {
     return name;
   }

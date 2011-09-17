@@ -28,6 +28,12 @@ public class Pipeline {
   @XmlElement(name = "job")
   private List<Job> jobs;
 
+  public Pipeline() {
+    super();
+  }
+
+  
+  
   public List<Environment> getEnvironments() {
     if (environments == null) {
       environments = new ArrayList<Environment>();

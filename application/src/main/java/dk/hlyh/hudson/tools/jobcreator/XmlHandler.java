@@ -15,16 +15,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.ValidationEvent;
-import javax.xml.bind.ValidationEventLocator;
-import javax.xml.bind.util.ValidationEventCollector;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import org.xml.sax.SAXException;
@@ -43,7 +39,7 @@ public class XmlHandler {
     if (file == null) {
       throw new IllegalArgumentException("File cannot be null");
     }
-    JAXBContext jc = null;
+
     try {
       JAXBContext context = JAXBContext.newInstance(ROOT_NODE);
       Unmarshaller unmarshaller = context.createUnmarshaller();
@@ -55,7 +51,7 @@ public class XmlHandler {
     } catch (FileNotFoundException ex) {
       throw new ImportException("Could not find pipeline file: " + file);
     } catch (UnmarshalException ex) {
-      if (ex.getCause() instanceof org.xml.sax.SAXParseException ) {
+      if (ex.getCause() instanceof org.xml.sax.SAXParseException) {
         LOGGER.severe("Failed to validate the pipeline definition against the schema: " + ex.getCause().getMessage());
       } else {
         LOGGER.severe("Failed to validate the pipeline definition against the schema" + ex);
@@ -69,12 +65,11 @@ public class XmlHandler {
   private Schema loadSchema() throws ImportException {
     try {
       SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-      URL schemaUrl = this.getClass().getResource(SCHEMA_FILE);
+      URL schemaUrl = XmlHandler.class.getResource(SCHEMA_FILE);
       if (schemaUrl == null) {
         throw new ImportException("Could not find schema file " + SCHEMA_FILE);
       }
-      Schema schema = schemaFactory.newSchema(new File(schemaUrl.getFile()));
-      return schema;
+      return schemaFactory.newSchema(new File(schemaUrl.getFile()));
     } catch (SAXException ex) {
       throw new ImportException("Could not load schema file for validation", ex);
     }
