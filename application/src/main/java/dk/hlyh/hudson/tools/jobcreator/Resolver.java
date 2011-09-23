@@ -71,8 +71,14 @@ public class Resolver {
     for (Job job : jobs) {
       ResolvePropertyVisitor visitor = new ResolvePropertyVisitor(job);
       HierarchyWalker.walkJobs(job, visitor);
-      job.getUpstreamJobs().retainAll(jobs);
       job.getDownstreamJobs().retainAll(jobs);
+    }
+    
+    // loop all jobs and set upstream/downstream
+    for (Job job : jobs) {
+      for (Job downstream : job.getDownstreamJobs()) {
+        downstream.getUpstreamJobs().add(job);
+      }
     }
 
     // Apply environment properties

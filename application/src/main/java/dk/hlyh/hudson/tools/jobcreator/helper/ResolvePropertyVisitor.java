@@ -16,12 +16,13 @@ import dk.hlyh.hudson.tools.jobcreator.schema.v1.Property;
 import dk.hlyh.hudson.tools.jobcreator.schema.v1.PropertySet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class ResolvePropertyVisitor implements Visitor {
 
   private final Job activeJob;
   private final Environment activeEnvironment;
-
+  
   public ResolvePropertyVisitor(Job job) {
     super();
     this.activeJob = job;

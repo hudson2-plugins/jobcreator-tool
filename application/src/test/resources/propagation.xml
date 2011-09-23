@@ -36,9 +36,6 @@
     <job>
       <name>job2</name>
       <template>template1.ftl</template>
-      <upstream>
-        <job>job1</job>
-      </upstream>
       <downstream>
         <job>job3</job>
       </downstream>      
@@ -74,9 +71,6 @@
     <job>
       <name>job5</name>
       <template>template1.ftl</template>
-      <upstream>
-        <job>job4</job>
-      </upstream>
       <properties>
         <property name="jobspec">myjob4</property>
       </properties>

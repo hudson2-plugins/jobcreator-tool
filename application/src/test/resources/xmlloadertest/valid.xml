@@ -57,9 +57,6 @@
     <job>
       <name>job2</name>
       <template>template1.ftl</template>
-      <upstream>
-        <job>job1</job>
-      </upstream>
     </job>
   </jobs>
 </ns1:pipeline>

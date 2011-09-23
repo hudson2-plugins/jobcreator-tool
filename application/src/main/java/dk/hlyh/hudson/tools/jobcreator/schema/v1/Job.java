@@ -31,9 +31,7 @@ public class Job {
   @XmlIDREF
   private Set<Job> parentJobs;
   
-  @XmlElementWrapper(name = "upstream")
-  @XmlElement(name = "job")
-  @XmlIDREF
+  @XmlTransient
   private Set<Job> upstreamJobs;
   
   @XmlElementWrapper(name = "downstream")
