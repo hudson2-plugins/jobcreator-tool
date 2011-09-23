@@ -59,10 +59,10 @@ public class ResolvePropertyVisitor implements Visitor {
       for (Property currentProperty : currentPropertySet.getProperties()) {
         resolvedPropertySet.put(currentProperty.getName(), currentProperty);
       }
-
-      if (environment.getOutputPattern() != null && environment.getOutputPattern().trim().length() > 0) {
-        activeEnvironment.setResolvesOutputPattern(environment.getOutputPattern());
-      }
+    }
+    
+    if (environment.getOutputPattern() != null && environment.getOutputPattern().trim().length() > 0) {    
+      activeEnvironment.setResolvesOutputPattern(environment.getOutputPattern());
     }
   }
 }

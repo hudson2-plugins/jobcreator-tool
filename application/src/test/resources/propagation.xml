@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ns1:pipeline  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+   xmlns:ns1='hudsonci.jobcreator.v1'
+   xsi:schemaLocation='hudsonci.jobcreator.v1 file:/mnt/nas/data/source-code/hudson-jobcreator/target/schemas/jobcreator-v1.xsd'>
+  <name>example</name>
+  <environments>
+    <environment>
+      <name>dev</name>
+      <outputPattern>${pipeline}_${environment}_${job}</outputPattern>
+      <include>
+        <job>job1</job>
+        <job>job2</job>
+        <job>job3</job>
+        <job>job4</job>
+        <job>job5</job>
+      </include>
+    </environment>
+  </environments>
+  <jobs>
+    <job>
+      <name>job1</name>
+      <template>template1.ftl</template>
+      <downstream>
+        <job>job2</job>
+      </downstream>
+      <properties>
+        <property name="down_1" propagation="downstream">down-1</property>
+        <property name="down_2" propagation="downstream">down-2</property>
+        <property name="down_3" propagation="downstream">down-3</property>
+        <property name="down_4" propagation="downstream">down-4</property>
+        <property name="down_5" propagation="downstream">down-5</property>
+        <property name="normal">normal</property>
+      </properties>
+    </job>
+    <job>
+      <name>job2</name>
+      <template>template1.ftl</template>
+      <upstream>
+        <job>job1</job>
+      </upstream>
+      <downstream>
+        <job>job3</job>
+      </downstream>      
+      <properties>
+        <property name="down_1" propagation="continue">this-will-be-replaced</property>
+        <property name="down_2" merge="leave">this-will-not-be-replaced</property>
+        <property name="down_3" merge="prefix">to-be-prefixed</property>
+        <property name="down_4" merge="append">to-be-postfixed</property>
+        <property name="down_5" propagation="downstream">this-will-continue-down</property>
+        <property name="normal">myjob3</property>
+      </properties>
+    </job>
+    <job>
+      <name>job3</name>
+      <template>template1.ftl</template>
+      <downstream>
+        <job>job4</job>
+      </downstream>   
+      <properties>
+        <property name="jobspec">myjob4</property>
+      </properties>
+    </job>
+    <job>
+      <name>job4</name>
+      <template>template1.ftl</template>
+      <downstream>
+        <job>job5</job>
+      </downstream>  
+      <properties>
+        <property name="jobspec">myjob4</property>
+      </properties>
+    </job>     
+    <job>
+      <name>job5</name>
+      <template>template1.ftl</template>
+      <upstream>
+        <job>job4</job>
+      </upstream>
+      <properties>
+        <property name="jobspec">myjob4</property>
+      </properties>
+    </job>     
+  </jobs>
+</ns1:pipeline>

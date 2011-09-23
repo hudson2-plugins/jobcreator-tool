@@ -15,6 +15,9 @@ import javax.xml.bind.annotation.XmlEnumValue;
 
 @XmlEnum
 public enum Propagation {
+
+    @XmlEnumValue(value="continue")
+    Continue,
     
     @XmlEnumValue(value="none")
     None,
@@ -24,10 +27,5 @@ public enum Propagation {
     
     @XmlEnumValue(value="downstream")                
     Downstream,       
-    
-    @XmlEnumValue(value="stop")
-    Stop,
-    
-    @XmlEnumValue(value="skip")
-    Skip    
+       
 }

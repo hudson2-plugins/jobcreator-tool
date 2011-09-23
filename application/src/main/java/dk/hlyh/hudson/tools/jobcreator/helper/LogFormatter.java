@@ -26,16 +26,11 @@ public class LogFormatter extends java.util.logging.Formatter {
   public String format(LogRecord record) {
     StringBuilder sb = new StringBuilder();
     sb.append(record.getLevel()).append(": ");
-    sb.append(record.getMessage());
-    if (record.getParameters() != null) {
-      for (Object param : record.getParameters()) {
-        sb.append(" ¤ ").append(param.toString());
-      }
-    }
+    sb.append(formatMessage(record));
     sb.append(lineSep);
 
-    if (record.getThrown()
-            != null) {
+    if (record.getThrown() != null) {
+      System.out.println("Has exception");
       StringWriter sink = new StringWriter();
       record.getThrown().printStackTrace(new PrintWriter(sink, true));
       sb.append(sink.toString());

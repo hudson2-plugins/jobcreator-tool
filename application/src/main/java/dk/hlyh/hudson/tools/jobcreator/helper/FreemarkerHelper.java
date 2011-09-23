@@ -23,8 +23,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class FreemarkerHelper {
 
@@ -52,7 +50,6 @@ public class FreemarkerHelper {
       Template template = freeMarkerConfiguration.getTemplate(job.getResolvedTemplate());
       Writer out = new OutputStreamWriter(new FileOutputStream(configXml));
       template.process(templateValues.getValues(), out);
-      System.out.println("Completed  job: " + job.getName());
       out.close();
     } catch (TemplateException ex) {
       throw new ImportException("Could not process job " + job.getName(), ex);

@@ -32,6 +32,7 @@
       </inherit>
       <include>
         <job>job2</job>
+        <job>job3</job>
       </include>
       <properties>
         <name>global</name>
@@ -50,9 +51,13 @@
       <downstream>
         <job>job2</job>
       </downstream>
-      <join></join>
       <properties>
-        <property name="job-spec">myjob</property>
+        <property name="prop1" propagation="downstream">original</property>
+        <property name="prop2" propagation="downstream">original2</property>
+        <property name="prop3" propagation="downstream">original3</property>
+        <property name="prop4" propagation="downstream">original4</property>
+        <property name="jobspec">myjob</property>
+        <property name="jobspec2" propagation="downstream">myjob</property>
       </properties>
     </job>
     <job>
@@ -61,6 +66,26 @@
       <upstream>
         <job>job1</job>
       </upstream>
+      <downstream>
+        <job>job3</job>
+      </downstream>      
+      <properties>
+        <property name="prop1" propagation="skip">skipped</property>
+        <property name="prop2" merge="leave">left</property>
+        <property name="prop3" merge="prefix">job2</property>
+        <property name="prop4" merge="append">job2</property>
+        <property name="jobspec">myjob3</property>
+      </properties>
     </job>
+    <job>
+      <name>job3</name>
+      <template>template1.ftl</template>
+      <upstream>
+        <job>job2</job>
+      </upstream>
+      <properties>
+        <property name="jobspec">myjob4</property>
+      </properties>
+    </job>    
   </jobs>
 </ns1:pipeline>

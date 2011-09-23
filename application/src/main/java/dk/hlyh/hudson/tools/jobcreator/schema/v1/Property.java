@@ -42,6 +42,9 @@ public class Property {
 
   
   public Merge getMerging() {
+    if (merging == null) {
+      merging = Merge.Replace;
+    }
     return merging;
   }
 
@@ -50,6 +53,9 @@ public class Property {
   }
 
   public Propagation getPropagation() {
+    if (propagation == null) {
+      propagation = Propagation.Continue;
+    }
     return propagation;
   }
 

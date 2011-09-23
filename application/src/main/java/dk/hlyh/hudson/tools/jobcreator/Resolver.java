@@ -46,9 +46,9 @@ public class Resolver {
   }
 
   public void resolve() throws ImportException {
-    
+
     FreemarkerHelper.setupFreemarker(arguments.getTemplateDirectory());
-    
+
     // Find the active environment
     Environment activeEnvironment = findEnvironment();
     if (activeEnvironment == null) {
@@ -90,14 +90,16 @@ public class Resolver {
     }
 
     // loop all jobs and propagate
-    for (Job job : jobs) {
+    for (Job job : jobs) {      
       if (job.getUpstreamJobs().isEmpty()) {
+        LOGGER.log(Level.INFO, "Pushing properties downstream: {0}", job);
         Map<String, Property> pushedProperties = new HashMap<String, Property>();
         pushDownstream(pushedProperties, job);
       }
     }
     for (Job job : jobs) {
       if (job.getDownstreamJobs().isEmpty()) {
+        LOGGER.log(Level.INFO, "Pushing properties upstream: {0}", job);
         Map<String, Property> pushedProperties = new HashMap<String, Property>();
         pushUpstream(pushedProperties, job);
       }
@@ -105,7 +107,7 @@ public class Resolver {
 
     // Loop all jobs and and build the template model
     for (Job job : jobs) {
-      
+      LOGGER.log(Level.INFO, "Writing job: {0}", job);
       TemplateValuesBuilder builder = new TemplateValuesBuilder();
       builder.setProperty("import.pipeline.name", pipeline.getName());
       builder.setProperty("import.env.name", arguments.getEnvironment());
@@ -142,36 +144,37 @@ public class Resolver {
   private void pushDownstream(Map<String, Property> pushedProperties, Job job) {
     Map<String, Property> pushedPropertiesDownstream = propagate(pushedProperties, job, Propagation.Downstream);
 
-
     for (Job downstreamJob : job.getDownstreamJobs()) {
       pushDownstream(pushedPropertiesDownstream, downstreamJob);
     }
   }
 
   private Map<String, Property> propagate(Map<String, Property> pushedProperties, Job job, Propagation direction) {
+    LOGGER.log(Level.INFO,"Propagating for job {0}",job);
     Map<String, Property> furtherPushedProperties = new HashMap<String, Property>();
     Map<String, Property> resolvedProperties = job.getResolvedProperties();
 
     // apply currently pushed properties
     List<String> toRemove = new ArrayList<String>();
     for (Property pushed : pushedProperties.values()) {
+      LOGGER.log(Level.INFO,"Evaluating {0}",pushed);
+      
       Property currentProperty = resolvedProperties.get(pushed.getName());
       if (currentProperty == null) {
+        LOGGER.log(Level.INFO,"Property does not exist");
         resolvedProperties.put(pushed.getName(), pushed);
         continue;
       }
-
+      LOGGER.log(Level.INFO,"Propagation :" +currentProperty.getPropagation()+ ", merging="+ currentProperty.getMerging());
       switch (currentProperty.getPropagation()) {
-        case Skip:
-          // then we should not do anyting
-          break;
-        case Stop:
-        // fallthrough
         case Upstream:
+        case None:
+        case Downstream:          
           toRemove.add(pushed.getName());
           break;
-        case None:
-          switch (pushed.getMerging()) {
+        case Continue:
+          
+          switch (currentProperty.getMerging()) {
             case Leave:
               // empty, don't replace existing values
               break;
@@ -197,7 +200,6 @@ public class Resolver {
           break;
       }
     }
-
 
     furtherPushedProperties.putAll(pushedProperties);
     for (String name : toRemove) {
@@ -231,5 +233,4 @@ public class Resolver {
     }
     return sb.toString();
   }
-
 }

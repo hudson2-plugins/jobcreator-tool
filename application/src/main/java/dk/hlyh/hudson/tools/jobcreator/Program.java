@@ -48,7 +48,7 @@ public class Program {
       parser.printUsage(System.err);
       return;
     } catch (ImportException e) {      
-      System.err.println("Import aborted: "+ e.getMessage());
+      System.err.println("Import aborted because of errors");
       System.exit(-1);      
     }
   }

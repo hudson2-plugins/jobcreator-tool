@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -24,6 +25,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 public class XmlHandler {
 
@@ -52,7 +54,10 @@ public class XmlHandler {
       throw new ImportException("Could not find pipeline file: " + file);
     } catch (UnmarshalException ex) {
       if (ex.getCause() instanceof org.xml.sax.SAXParseException) {
-        LOGGER.severe("Failed to validate the pipeline definition against the schema: " + ex.getCause().getMessage());
+        SAXParseException pe = (SAXParseException) ex.getCause();
+        int column = pe.getColumnNumber();
+        int line = pe.getLineNumber();
+        LOGGER.log(Level.SEVERE, "Failed to validate the pipeline definition against the schema: \"{0}\"  at line {1}, column={2}", new Object[]{pe.getMessage(), line, column});
       } else {
         LOGGER.severe("Failed to validate the pipeline definition against the schema" + ex);
       }
@@ -69,7 +74,7 @@ public class XmlHandler {
       if (schemaUrl == null) {
         throw new ImportException("Could not find schema file " + SCHEMA_FILE);
       }
-      return schemaFactory.newSchema(new File(schemaUrl.getFile()));
+      return schemaFactory.newSchema(schemaUrl);
     } catch (SAXException ex) {
       throw new ImportException("Could not load schema file for validation", ex);
     }
