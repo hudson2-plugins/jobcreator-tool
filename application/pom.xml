@@ -43,6 +43,15 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
         <version>1.4</version>
         <executions>
@@ -80,7 +89,7 @@
         <configuration>
           <project>${project}</project>
           <destdir>${project.build.directory}/schemas</destdir>
-          <srcdir>${project.build.sourceDirectory}/dk/hlyh/hudson/tools/jobcreator/schema</srcdir>
+          <srcdir>${project.build.sourceDirectory}/dk/hlyh/hudson/tools/jobcreator/input/xml/model</srcdir>
           <schemas>
             <schema>
               <namespace>hudsonci.jobcreator.v1</namespace>
@@ -111,14 +120,15 @@
             <version>2.2</version>
           </dependency>
         </dependencies>
-      </plugin>            
+      </plugin>
     </plugins>
   </build>
+  
   <dependencies>
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
-      <version>6.2</version>
+      <version>6.2.1</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
