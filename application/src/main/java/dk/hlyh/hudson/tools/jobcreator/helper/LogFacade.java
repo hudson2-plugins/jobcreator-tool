@@ -22,15 +22,18 @@ public final class LogFacade {
   }
 
   public static void severe(String msg, Object... parameters) {
-    LOGGER.log(Level.SEVERE, msg, parameters);
+    StackTraceElement[] stack= Thread.currentThread().getStackTrace();
+    LOGGER.logp(Level.SEVERE, stack[2].getClassName(),stack[2].getMethodName(), msg, parameters);
   }
   
   public static void severe(Throwable exception) {
-    LOGGER.log(Level.SEVERE, exception.getMessage(), exception);
+    StackTraceElement[] stack= Thread.currentThread().getStackTrace();
+    LOGGER.logp(Level.SEVERE, stack[2].getClassName(),stack[2].getMethodName(),exception.getMessage(), exception);
   }  
 
   public static void warning(String msg, Object... parameters) {
-    LOGGER.log(Level.WARNING, msg, parameters);
+    StackTraceElement[] stack= Thread.currentThread().getStackTrace();
+    LOGGER.logp(Level.WARNING, stack[2].getClassName(),stack[2].getMethodName(),msg, parameters);
   }
 
   public static void info(String msg, Object... parameters) {

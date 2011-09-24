@@ -81,6 +81,42 @@ public class Arguments {
   public boolean isQuiet() {
     return quiet;
   }
+
+  public void setDebug(boolean debug) {
+    this.debug = debug;
+  }
+
+  public void setEnvironment(String environment) {
+    this.environment = environment;
+  }
+
+  public void setInputFormat(InputFormat inputFormat) {
+    this.inputFormat = inputFormat;
+  }
+
+  public void setOutputDirectory(File outputDirectory) {
+    this.outputDirectory = outputDirectory;
+  }
+
+  public void setOverrideFile(File overrideFile) {
+    this.overrideFile = overrideFile;
+  }
+
+  public void setQuiet(boolean quiet) {
+    this.quiet = quiet;
+  }
+
+  public void setTemplateDirectory(File templateDirectory) {
+    this.templateDirectory = templateDirectory;
+  }
+
+  public void setVerbose(boolean verbose) {
+    this.verbose = verbose;
+  }
+  
+  public void setInput(File file) {
+    input = file;
+  }
     
   public enum InputFormat {
     xmlv1,

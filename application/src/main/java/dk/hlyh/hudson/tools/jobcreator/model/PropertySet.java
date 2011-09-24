@@ -39,7 +39,7 @@ public class PropertySet {
     return properties.values();
   }
 
-  void removeProperty(String key) {
+  public void removeProperty(String key) {
     properties.remove(key);
   }
 

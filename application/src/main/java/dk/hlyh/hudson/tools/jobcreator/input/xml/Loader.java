@@ -56,7 +56,9 @@ public class Loader {
 
     // find the environment to generate
     dk.hlyh.hudson.tools.jobcreator.input.xml.model.Environment sourceEnv = Utils.findEnvironment(sourcePipeline, arguments.getEnvironment());
-
+    if (sourceEnv == null) {
+      throw new ImportException("Environment '"+arguments.getEnvironment()+"' not found");
+    }
     // Build the active environment by collapsing the inheritence tree
     envTransformer.transformEnvironment(sourceEnv);
     activeEnvironment = envTransformer.getActiveEnvironment();
@@ -74,7 +76,7 @@ public class Loader {
     return activePipeline;
   }
 
-  private dk.hlyh.hudson.tools.jobcreator.input.xml.model.Pipeline loadXml() {
+  dk.hlyh.hudson.tools.jobcreator.input.xml.model.Pipeline loadXml() {
     File inputFile = arguments.getInput();
 
     if (inputFile == null || !inputFile.exists()) {

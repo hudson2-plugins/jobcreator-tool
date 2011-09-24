@@ -10,8 +10,10 @@
  */
 package dk.hlyh.hudson.tools.jobcreator.input.xml.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlElement;
@@ -34,7 +36,7 @@ public class Environment {
   @XmlElementWrapper(name = "inherit")
   @XmlElement(name = "environment")
   @XmlIDREF
-  private Set<Environment> parentEnv;
+  private List<Environment> parentEnv;
   
   @XmlElementWrapper(name = "include")
   @XmlElement(name = "job")
@@ -57,9 +59,9 @@ public class Environment {
     return name;
   }
 
-  public Set<Environment> getParentEnv() {
+  public List<Environment> getParentEnv() {
     if (parentEnv == null) {
-      parentEnv = new HashSet<Environment>();
+      parentEnv = new ArrayList<Environment>();
     }
     return parentEnv;
   }

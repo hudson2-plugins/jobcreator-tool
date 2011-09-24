@@ -41,6 +41,10 @@ class JobTransformer {
 
     //handle properties
     for (dk.hlyh.hudson.tools.jobcreator.input.xml.model.Property sourceProperty : sourceJob.getProperties()) {
+        if (sourceProperty.getValue() == null || sourceProperty.getValue().length() == 0) {
+          activeJob.removeProperty(sourceProperty.getName());
+          continue;
+        }      
       dk.hlyh.hudson.tools.jobcreator.model.Property activeProperty = activeJob.createProperty(sourceProperty.getName());
       activeProperty.setValue(sourceProperty.getValue());
       activeProperty.setPropagation(Utils.convertPropagation(sourceProperty.getPropagation()));

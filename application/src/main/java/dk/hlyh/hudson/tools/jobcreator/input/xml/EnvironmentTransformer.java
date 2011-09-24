@@ -35,8 +35,7 @@ class EnvironmentTransformer {
   dk.hlyh.hudson.tools.jobcreator.model.Environment getActiveEnvironment() {
     return activeEnvironment;
   }
-  
-  
+
   private void visitEnvironment(dk.hlyh.hudson.tools.jobcreator.input.xml.model.Environment sourceEnvironment) {
     // depth first 
     for (dk.hlyh.hudson.tools.jobcreator.input.xml.model.Environment parent : sourceEnvironment.getParentEnv()) {
@@ -63,6 +62,11 @@ class EnvironmentTransformer {
       dk.hlyh.hudson.tools.jobcreator.model.PropertySet activeSet = activeEnvironment.getPropertySet(sourceSet.getName());
 
       for (dk.hlyh.hudson.tools.jobcreator.input.xml.model.Property sourceProperty : sourceSet.getProperties()) {
+        if (sourceProperty.getValue() == null || sourceProperty.getValue().length() == 0) {
+          activeSet.removeProperty(sourceProperty.getName());
+          continue;
+        }
+
         dk.hlyh.hudson.tools.jobcreator.model.Property activeProperty = activeSet.createProperty(sourceProperty.getName());
         activeProperty.setValue(sourceProperty.getValue());
         activeProperty.setPropagation(Utils.convertPropagation(sourceProperty.getPropagation()));

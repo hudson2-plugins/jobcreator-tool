@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns1:pipeline  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+   xmlns:ns1='hudsonci.jobcreator.v1'
+   xsi:schemaLocation='hudsonci.jobcreator.v1 file:/home/henrik/source-code/jobcreator-tool/application/target/schemas/jobcreator-v1.xsd'>
+  <name>example</name>
+  <environments>
+    <environment>
+      <name>parent1</name>
+      <outputPattern>${pipeline}_${environment}_${job}</outputPattern>
+      <include>
+        <job>job1</job>
+      </include>
+      <properties>
+        <name>global</name>
+        <property name="prop_1">value1</property>
+        <property name="prop_2">value2</property>
+        <property name="prop_3" propagation="downstream" merge="prefix">value3</property>
+      </properties>
+    </environment>
+    <environment>
+      <name>parent2</name>
+      <outputPattern>${pipeline}_${job}</outputPattern>
+      <include>
+        <job>job1</job>
+      </include>    
+      <properties>
+        <name>global</name>
+        <property name="env2-dsds" >dsdsad</property>
+        <property name="prop_1" >valueA</property>
+        <property name="prop_3" propagation="upstream" merge="append">valueB</property>
+      </properties> 
+    </environment>
+    
+    <environment>
+      <name>p1-first</name>  
+      <inherit>
+        <environment>parent1</environment>
+        <environment>parent2</environment>             
+      </inherit>
+      <properties>
+        <name>global</name>
+        <property name="prop_2" />
+      </properties>       
+    </environment>
+    <environment>
+      <name>p2-first</name>  
+      <inherit>
+        <environment>parent2</environment>
+        <environment>parent1</environment>        
+      </inherit>
+    </environment>
+    <environment>
+      <name>local-first</name>
+      <outputPattern>${pipeline}</outputPattern>
+      <inherit>
+        <environment>parent2</environment>
+        <environment>parent1</environment>        
+      </inherit>      
+    </environment>     
+  </environments>
+  <jobs>
+    <job>
+      <name>job1</name>
+      <template>template1.ftl</template>      
+    </job>
+  </jobs>
+</ns1:pipeline>
