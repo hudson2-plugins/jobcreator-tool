@@ -17,7 +17,6 @@ import dk.hlyh.hudson.tools.jobcreator.model.Propagation;
 import dk.hlyh.hudson.tools.jobcreator.model.Property;
 import dk.hlyh.hudson.tools.jobcreator.model.Environment;
 import dk.hlyh.hudson.tools.jobcreator.model.Job;
-import dk.hlyh.hudson.tools.jobcreator.model.Merge;
 import dk.hlyh.hudson.tools.jobcreator.model.Pipeline;
 import dk.hlyh.hudson.tools.jobcreator.model.PropertySet;
 import java.util.ArrayList;

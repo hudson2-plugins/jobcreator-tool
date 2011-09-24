@@ -15,21 +15,33 @@ import org.kohsuke.args4j.Option;
 
 public class Arguments {
 
-  @Option(name = "--pipeline", required = true, usage = "Which xml file to use for pipeline definition")
-  private File pipeline;
+  @Option(name="--format", required=false, usage="Specify which format to use for input, xml is the default")
+  private InputFormat inputFormat;
   
-  @Option(name = "--template", required = true, usage = "directory containing the templates")
+  @Option(name = "--input", aliases="-i", required = true, usage = "Which file to use for pipeline definition")
+  private File input;
+  
+  @Option(name = "--template", required = true, usage = "Directory containing the templates")
   private File templateDirectory;
   
-  @Option(name = "--output", required = true, usage = "output directory")
+  @Option(name = "--output", aliases="-o", required = true, usage = "output directory")
   private File outputDirectory;
   
-  @Option(name = "--environment", required = true, usage = "environemnt to load")
+  @Option(name = "--environment", aliases="-e", required = true, usage = "Environemnt to load")
   private String environment;
   
   @Option(name = "--override", required = false, usage = "Personal override file")
   private File overrideFile;
 
+  @Option(name="--quiet")
+  private boolean quiet;
+  
+  @Option(name="--verbose", aliases="-v")
+  private boolean verbose;
+  
+  @Option(name="--debug", aliases="-X")
+  private boolean debug;
+  
   public Arguments() {
     super();
   }
@@ -46,11 +58,32 @@ public class Arguments {
     return overrideFile;
   }
 
-  public File getPipeline() {
-    return pipeline;
+  public File getInput() {
+    return input;
   }
 
   public File getTemplateDirectory() {
     return templateDirectory;
+  }
+
+  public InputFormat getInputFormat() {    
+    return inputFormat != null ? inputFormat : InputFormat.xmlv1;
+  }
+
+  public boolean isDebug() {
+    return debug;
+  }
+
+  public boolean isVerbose() {
+    return verbose;
+  }
+
+  public boolean isQuiet() {
+    return quiet;
+  }
+    
+  public enum InputFormat {
+    xmlv1,
+    yaml,    
   }
 }

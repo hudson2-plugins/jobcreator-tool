@@ -45,7 +45,6 @@ class JobTransformer {
       activeProperty.setValue(sourceProperty.getValue());
       activeProperty.setPropagation(Utils.convertPropagation(sourceProperty.getPropagation()));
       activeProperty.setMerging(Utils.convertMerging(sourceProperty.getMerging()));
-
     }
   }
 }

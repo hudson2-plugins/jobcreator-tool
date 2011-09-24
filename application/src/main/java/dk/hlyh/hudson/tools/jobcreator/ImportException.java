@@ -10,7 +10,7 @@
  */
 package dk.hlyh.hudson.tools.jobcreator;
 
-public class ImportException extends Exception {
+public class ImportException extends RuntimeException {
 
   public ImportException(String message, Throwable cause) {
     super(message, cause);
