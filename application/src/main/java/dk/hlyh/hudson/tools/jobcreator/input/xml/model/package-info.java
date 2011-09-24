@@ -8,15 +8,11 @@
  * Contributors:
  *    Henrik Lynggaard Hansen
  */
-package dk.hlyh.hudson.tools.jobcreator.helper;
+@XmlSchema(namespace="hudsonci.jobcreator.v1")
+@XmlAccessorType(XmlAccessType.FIELD)
+package dk.hlyh.hudson.tools.jobcreator.input.xml.model;
 
-import dk.hlyh.hudson.tools.jobcreator.schema.v1.Environment;
-import dk.hlyh.hudson.tools.jobcreator.schema.v1.Job;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlSchema;
 
-public interface Visitor {
-
-  void visitEnvironment(Environment environment);
-
-  void visitJob(Job currentJob);
-  
-}

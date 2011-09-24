@@ -8,7 +8,7 @@
  * Contributors:
  *    Henrik Lynggaard Hansen
  */
-package dk.hlyh.hudson.tools.jobcreator.schema.v1;
+package dk.hlyh.hudson.tools.jobcreator.input.xml.model;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -49,12 +49,6 @@ public class Environment {
   @XmlElement(name = "properties")
   private Set<PropertySet> properties;
   
-  @XmlTransient
-  private Map<String, Map<String,Property> > resolvesProperties;
-  
-  @XmlTransient
-  private String resolvesOutputPattern;
-
   public Environment() {
     super();
   }
@@ -91,13 +85,6 @@ public class Environment {
     return properties;
   }
 
-  public  Map<String, Map<String,Property> > getResolvesProperties() {
-    if (resolvesProperties == null) {
-      resolvesProperties = new HashMap<String, Map<String, Property>>();
-    }    
-    return resolvesProperties;
-  }
-
   public String getOutputPattern() {
     return outputPattern;
   }
@@ -105,17 +92,7 @@ public class Environment {
   public void setOutputPattern(String outputPattern) {
     this.outputPattern = outputPattern;
   }
-
-  public String getResolvesOutputPattern() {
-    return resolvesOutputPattern;
-  }
-
-  public void setResolvesOutputPattern(String resolvesOutputPattern) {
-    this.resolvesOutputPattern = resolvesOutputPattern;
-  }
-  
-  
-
+ 
   @Override
   public boolean equals(Object obj) {
     if (obj == null) {

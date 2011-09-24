@@ -11,9 +11,9 @@
 package dk.hlyh.hudson.tools.jobcreator.helper;
 
 import dk.hlyh.hudson.tools.jobcreator.ImportException;
-import dk.hlyh.hudson.tools.jobcreator.schema.v1.Environment;
-import dk.hlyh.hudson.tools.jobcreator.schema.v1.Job;
-import dk.hlyh.hudson.tools.jobcreator.schema.v1.Pipeline;
+import dk.hlyh.hudson.tools.jobcreator.model.Environment;
+import dk.hlyh.hudson.tools.jobcreator.model.Job;
+import dk.hlyh.hudson.tools.jobcreator.model.Pipeline;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
@@ -35,7 +35,7 @@ public class FreemarkerHelper {
   public static void writeJob(File outputDirectory, Job job, Environment environment, TemplateValuesBuilder templateValues, Pipeline pipeline) throws ImportException {
     try {
       // merge with template
-      String outputName = environment.getResolvesOutputPattern();
+      String outputName = environment.getOutputPattern();
       outputName = outputName.replace("${environment}", environment.getName());
       outputName = outputName.replace("${pipeline}", pipeline.getName());
       outputName = outputName.replace("${job}", job.getName());
@@ -47,7 +47,7 @@ public class FreemarkerHelper {
       File configXml = new File(jobDirectory, "config.xml");
 
       // merge with template
-      Template template = freeMarkerConfiguration.getTemplate(job.getResolvedTemplate());
+      Template template = freeMarkerConfiguration.getTemplate(job.getTemplate());
       Writer out = new OutputStreamWriter(new FileOutputStream(configXml));
       template.process(templateValues.getValues(), out);
       out.close();

@@ -8,11 +8,12 @@
  * Contributors:
  *    Henrik Lynggaard Hansen
  */
-@XmlSchema(namespace="hudsonci.jobcreator.v1")
-@XmlAccessorType(XmlAccessType.FIELD)
-package dk.hlyh.hudson.tools.jobcreator.schema.v1;
+package dk.hlyh.hudson.tools.jobcreator.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlSchema;
+public enum Propagation {
 
+    Continue,
+    None,
+    Upstream,   
+    Downstream,              
+}

@@ -8,24 +8,24 @@
  * Contributors:
  *    Henrik Lynggaard Hansen
  */
-package dk.hlyh.hudson.tools.jobcreator.schema.v1;
+package dk.hlyh.hudson.tools.jobcreator.input.xml.model;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 
 @XmlEnum
-public enum Propagation {
-
-    @XmlEnumValue(value="continue")
-    Continue,
+public enum Merge {
     
-    @XmlEnumValue(value="none")
-    None,
+    @XmlEnumValue(value="leave")
+    Leave,
+      
+    @XmlEnumValue(value="replace")
+    Replace,
     
-    @XmlEnumValue(value="upstream")
-    Upstream,
+    @XmlEnumValue(value="append")                
+    Append,       
     
-    @XmlEnumValue(value="downstream")                
-    Downstream,       
-       
+    @XmlEnumValue(value="prefix")
+    Prefix
+    
 }

@@ -8,7 +8,7 @@
  * Contributors:
  *    Henrik Lynggaard Hansen
  */
-package dk.hlyh.hudson.tools.jobcreator.schema.v1;
+package dk.hlyh.hudson.tools.jobcreator.input.xml.model;
 
 import java.util.Set;
 import javax.xml.bind.annotation.XmlElement;
@@ -26,8 +26,6 @@ public class PropertySet {
   public PropertySet() {
     super();
   }
-
-  
   
   public String getName() {
     return name;

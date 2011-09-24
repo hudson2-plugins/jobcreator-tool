@@ -25,7 +25,7 @@ public class TemplateValuesBuilder {
   }
 
   public void setProperty(String key, String value) throws ImportException {
-    LOGGER.info("Setting property '" + key + "' , '" + value + "'");
+    LOGGER.fine("Setting property '" + key + "' , '" + value + "'");
 
     // simple Validations
     if (key == null || key.trim().length() == 0) {

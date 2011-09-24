@@ -8,24 +8,12 @@
  * Contributors:
  *    Henrik Lynggaard Hansen
  */
-package dk.hlyh.hudson.tools.jobcreator.schema.v1;
+package dk.hlyh.hudson.tools.jobcreator.model;
 
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
-
-@XmlEnum
 public enum Merge {
     
-    @XmlEnumValue(value="leave")
     Leave,
-      
-    @XmlEnumValue(value="replace")
     Replace,
-    
-    @XmlEnumValue(value="append")                
     Append,       
-    
-    @XmlEnumValue(value="prefix")
-    Prefix
-    
+    Prefix    
 }

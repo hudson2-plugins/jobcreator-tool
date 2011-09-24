@@ -8,7 +8,7 @@
  * Contributors:
  *    Henrik Lynggaard Hansen
  */
-package dk.hlyh.hudson.tools.jobcreator.schema.v1;
+package dk.hlyh.hudson.tools.jobcreator.input.xml.model;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,10 +30,7 @@ public class Job {
   @XmlElement(name = "job")
   @XmlIDREF
   private Set<Job> parentJobs;
-  
-  @XmlTransient
-  private Set<Job> upstreamJobs;
-  
+   
   @XmlElementWrapper(name = "downstream")
   @XmlElement(name = "job")
   @XmlIDREF
@@ -47,12 +44,6 @@ public class Job {
   @XmlElement(name = "property")
   private Set<Property> properties;
   
-  @XmlTransient
-  private Map<String, Property> resolvedProperties;
-  
-  @XmlTransient
-  private String resolvedTemplate;
-
   public Job() {
     super();
   }
@@ -94,30 +85,8 @@ public class Job {
     return properties;
   }
 
-  public Set<Job> getUpstreamJobs() {
-    if (upstreamJobs == null) {
-      upstreamJobs = new HashSet<Job>();
-    }
-    return upstreamJobs;
-  }
-
   public Job getJoinJob() {
     return joinJob;
-  }
-
-  public Map<String, Property> getResolvedProperties() {
-    if (resolvedProperties == null) {
-      resolvedProperties = new HashMap<String, Property>();
-    }
-    return resolvedProperties;
-  }
-
-  public String getResolvedTemplate() {
-    return resolvedTemplate;
-  }
-
-  public void setResolvedTemplate(String resolvedTemplate) {
-    this.resolvedTemplate = resolvedTemplate;
   }
 
   @Override

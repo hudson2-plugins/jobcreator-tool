@@ -11,20 +11,20 @@
 package dk.hlyh.hudson.tools.jobcreator;
 
 import dk.hlyh.hudson.tools.jobcreator.helper.FreemarkerHelper;
-import dk.hlyh.hudson.tools.jobcreator.helper.HierarchyWalker;
-import dk.hlyh.hudson.tools.jobcreator.helper.IncludedJobsVisitor;
-import dk.hlyh.hudson.tools.jobcreator.helper.ResolvePropertyVisitor;
 import dk.hlyh.hudson.tools.jobcreator.helper.TemplateValuesBuilder;
-import dk.hlyh.hudson.tools.jobcreator.schema.v1.Environment;
-import dk.hlyh.hudson.tools.jobcreator.schema.v1.Job;
-import dk.hlyh.hudson.tools.jobcreator.schema.v1.Pipeline;
-import dk.hlyh.hudson.tools.jobcreator.schema.v1.Propagation;
-import dk.hlyh.hudson.tools.jobcreator.schema.v1.Property;
+
+import dk.hlyh.hudson.tools.jobcreator.model.Propagation;
+import dk.hlyh.hudson.tools.jobcreator.model.Property;
+import dk.hlyh.hudson.tools.jobcreator.model.Environment;
+import dk.hlyh.hudson.tools.jobcreator.model.Job;
+import dk.hlyh.hudson.tools.jobcreator.model.Merge;
+import dk.hlyh.hudson.tools.jobcreator.model.Pipeline;
+import dk.hlyh.hudson.tools.jobcreator.model.PropertySet;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -48,101 +48,67 @@ public class Resolver {
   public void resolve() throws ImportException {
 
     FreemarkerHelper.setupFreemarker(arguments.getTemplateDirectory());
+    Environment activeEnvironment = pipeline.getEnvironment();
+    List<Job> activeJobs = pipeline.getJobs();
 
-    // Find the active environment
-    Environment activeEnvironment = findEnvironment();
-    if (activeEnvironment == null) {
-      return;
-    }
-    LOGGER.log(Level.INFO, "Active environment: {0}", activeEnvironment);
-
-    // get The list of jobs
-    IncludedJobsVisitor includedJobsVisitor = new IncludedJobsVisitor();
-    HierarchyWalker.walkEnvironments(activeEnvironment, includedJobsVisitor);
-    Set<Job> jobs = includedJobsVisitor.getJobs();
-    LOGGER.log(Level.INFO, "Jobs to build: {0}", jobs);
-
-    // build the environment properties
-    ResolvePropertyVisitor environmentPropertyVisitor = new ResolvePropertyVisitor(activeEnvironment);
-    HierarchyWalker.walkEnvironments(activeEnvironment, environmentPropertyVisitor);
-
-
-    // loop all jobs and set initial properties
-    for (Job job : jobs) {
-      ResolvePropertyVisitor visitor = new ResolvePropertyVisitor(job);
-      HierarchyWalker.walkJobs(job, visitor);
-      job.getDownstreamJobs().retainAll(jobs);
-    }
-    
-    // loop all jobs and set upstream/downstream
-    for (Job job : jobs) {
-      for (Job downstream : job.getDownstreamJobs()) {
-        downstream.getUpstreamJobs().add(job);
-      }
-    }
+    LOGGER.log(Level.INFO, "Active environment: {0}", activeEnvironment.getName());
+    LOGGER.log(Level.INFO, "Jobs to build: {0}", jobsAsString(activeJobs));
 
     // Apply environment properties
-    for (Job job : jobs) {
+    for (Job job : pipeline.getJobs()) {
 
-      Map<String, Property> globalSet = activeEnvironment.getResolvesProperties().get("global");
-      Map<String, Property> jobSpecificSet = activeEnvironment.getResolvesProperties().get(job.getName());
-      Map<String, Property> currentSet = job.getResolvedProperties();
+      PropertySet globalSet = activeEnvironment.getPropertySet("global");
+      PropertySet jobSpecificSet = activeEnvironment.getPropertySet(job.getName());
       if (globalSet != null) {
-        mergePropertySet(globalSet, currentSet);
+        mergePropertySet(globalSet, job);
       }
       if (jobSpecificSet != null) {
-        mergePropertySet(jobSpecificSet, currentSet);
+        mergePropertySet(jobSpecificSet, job);
       }
     }
 
     // loop all jobs and propagate
-    for (Job job : jobs) {      
-      if (job.getUpstreamJobs().isEmpty()) {
-        LOGGER.log(Level.INFO, "Pushing properties downstream: {0}", job);
+    for (Job job : activeJobs) {
+      if (job.getUpstream().isEmpty()) {
+        LOGGER.log(Level.INFO, "Pushing properties downstream: {0}", job.getName());
         Map<String, Property> pushedProperties = new HashMap<String, Property>();
         pushDownstream(pushedProperties, job);
       }
     }
-    for (Job job : jobs) {
-      if (job.getDownstreamJobs().isEmpty()) {
-        LOGGER.log(Level.INFO, "Pushing properties upstream: {0}", job);
+    for (Job job : activeJobs) {
+      if (job.getDownstream().isEmpty()) {
+        LOGGER.log(Level.INFO, "Pushing properties upstream: {0}", job.getName());
         Map<String, Property> pushedProperties = new HashMap<String, Property>();
         pushUpstream(pushedProperties, job);
       }
     }
 
     // Loop all jobs and and build the template model
-    for (Job job : jobs) {
-      LOGGER.log(Level.INFO, "Writing job: {0}", job);
+    for (Job job : activeJobs) {
+      LOGGER.log(Level.INFO, "Writing job: {0}", job.getName());
       TemplateValuesBuilder builder = new TemplateValuesBuilder();
       builder.setProperty("import.pipeline.name", pipeline.getName());
       builder.setProperty("import.env.name", arguments.getEnvironment());
-      builder.setProperty("import.jobs", jobListAsString(jobs));
-      builder.setProperty("import.job.upstream", jobListAsString(job.getUpstreamJobs()));
-      builder.setProperty("import.job.downstream", jobListAsString(job.getDownstreamJobs()));
-      for (Property property : job.getResolvedProperties().values()) {
-        builder.setProperty(property.getName(), property.getValue());
+      builder.setProperty("import.jobs", jobsAsString(activeJobs));
+      builder.setProperty("import.job.upstream", jobsAsString(job.getUpstream()));
+      builder.setProperty("import.job.downstream", jobsAsString(job.getDownstream()));
+      if (job.getJoin() != null) {
+        builder.setProperty("import.job.join", job.getJoin().getName());
+      }
+      for (Property property : job.getProperties()) {
+        builder.setProperty(property.getKey(), property.getValue());
       }
 
       FreemarkerHelper.writeJob(arguments.getOutputDirectory(), job, activeEnvironment, builder, pipeline);
-      LOGGER.log(Level.INFO, "Completed job: {0}", job);
+      LOGGER.log(Level.INFO, "Completed job: {0}", job.getName());
     }
-  }
-
-  private Environment findEnvironment() {
-    for (Environment currentEnvironment : pipeline.getEnvironments()) {
-      if (arguments.getEnvironment().equals(currentEnvironment.getName())) {
-        return currentEnvironment;
-      }
-    }
-    return null;
   }
 
   private void pushUpstream(Map<String, Property> pushedProperties, Job job) {
     Map<String, Property> pushedPropertiesDownstream = propagate(pushedProperties, job, Propagation.Downstream);
 
 
-    for (Job upstreamJob : job.getUpstreamJobs()) {
+    for (Job upstreamJob : job.getUpstream()) {
       pushUpstream(pushedPropertiesDownstream, upstreamJob);
     }
   }
@@ -150,57 +116,51 @@ public class Resolver {
   private void pushDownstream(Map<String, Property> pushedProperties, Job job) {
     Map<String, Property> pushedPropertiesDownstream = propagate(pushedProperties, job, Propagation.Downstream);
 
-    for (Job downstreamJob : job.getDownstreamJobs()) {
+    for (Job downstreamJob : job.getDownstream()) {
       pushDownstream(pushedPropertiesDownstream, downstreamJob);
     }
   }
 
   private Map<String, Property> propagate(Map<String, Property> pushedProperties, Job job, Propagation direction) {
-    LOGGER.log(Level.INFO,"Propagating for job {0}",job);
+    LOGGER.log(Level.FINE, "Propagating for job {0}", job.getName());
     Map<String, Property> furtherPushedProperties = new HashMap<String, Property>();
-    Map<String, Property> resolvedProperties = job.getResolvedProperties();
+    //Map<String, Property> resolvedProperties = job.getProperties();
 
     // apply currently pushed properties
     List<String> toRemove = new ArrayList<String>();
     for (Property pushed : pushedProperties.values()) {
-      LOGGER.log(Level.INFO,"Evaluating {0}",pushed);
-      
-      Property currentProperty = resolvedProperties.get(pushed.getName());
+      LOGGER.log(Level.FINE, "Evaluating {0}", pushed.getKey());
+
+      Property currentProperty = job.getProperty(pushed.getKey());
       if (currentProperty == null) {
-        LOGGER.log(Level.INFO,"Property does not exist");
-        resolvedProperties.put(pushed.getName(), pushed);
+        LOGGER.log(Level.FINE, "Property does not exist");
+        job.createProperty(pushed);
         continue;
       }
-      LOGGER.log(Level.INFO,"Propagation :" +currentProperty.getPropagation()+ ", merging="+ currentProperty.getMerging());
+
+      LOGGER.log(Level.FINE, "Propagation :" + currentProperty.getPropagation() + ", merging=" + currentProperty.getMerging());
       switch (currentProperty.getPropagation()) {
         case Upstream:
         case None:
-        case Downstream:          
-          toRemove.add(pushed.getName());
+        case Downstream:
+          toRemove.add(pushed.getKey());
           break;
         case Continue:
-          
           switch (currentProperty.getMerging()) {
             case Leave:
               // empty, don't replace existing values
               break;
             case Append:
               String appendedValue = currentProperty.getValue() + "," + pushed.getValue();
-              Property appendedProperty = new Property(currentProperty);
-              appendedProperty.setValue(appendedValue);
-              resolvedProperties.put(appendedProperty.getName(), appendedProperty);
+              currentProperty.setValue(appendedValue);
               break;
             case Prefix:
               String prefixedValue = pushed.getValue() + "," + currentProperty.getValue();
-              Property prefixedProperty = new Property(currentProperty);
-              prefixedProperty.setValue(prefixedValue);
-              resolvedProperties.put(prefixedProperty.getName(), prefixedProperty);
+              currentProperty.setValue(prefixedValue);
               break;
             case Replace:
               String replacedValue = pushed.getValue();
-              Property replacedProperty = new Property(currentProperty);
-              replacedProperty.setValue(replacedValue);
-              resolvedProperties.put(replacedProperty.getName(), replacedProperty);
+              currentProperty.setValue(replacedValue);
               break;
           }
           break;
@@ -211,25 +171,30 @@ public class Resolver {
     for (String name : toRemove) {
       furtherPushedProperties.remove(name);
     }
-    for (Property property : job.getResolvedProperties().values()) {
+    for (Property property : job.getProperties()) {
       if (property.getPropagation() == direction) {
-        furtherPushedProperties.put(property.getName(), property);
+        LOGGER.log(Level.FINE,"Found property to push {0}",property);
+        furtherPushedProperties.put(property.getKey(), property);
       }
     }
 
     return furtherPushedProperties;
   }
 
-  private void mergePropertySet(Map<String, Property> source, Map<String, Property> destination) {
+  private void mergePropertySet(PropertySet source, Job job) {
     if (source == null) {
       return;
     }
-    for (Property sourceProperty : source.values()) {
-      destination.put(sourceProperty.getName(), sourceProperty);
+    for (Property sourceProperty : source.getProperties()) {
+      if (sourceProperty.getValue() == null || sourceProperty.getValue().length() == 0) {
+        job.removeProperty(sourceProperty.getKey());
+        continue;
+      }
+      job.createProperty(sourceProperty);
     }
   }
 
-  private String jobListAsString(Set<Job> jobs) {
+  private String jobsAsString(Collection<Job> jobs) {
     StringBuilder sb = new StringBuilder();
     for (Job job : jobs) {
       if (sb.length() > 0) {

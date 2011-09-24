@@ -10,13 +10,12 @@
  */
 package dk.hlyh.hudson.tools.jobcreator;
 
+import dk.hlyh.hudson.tools.jobcreator.input.xml.Loader;
 import dk.hlyh.hudson.tools.jobcreator.helper.LogFormatter;
-import dk.hlyh.hudson.tools.jobcreator.schema.v1.Pipeline;
-import freemarker.template.TemplateException;
-import java.io.IOException;
+import dk.hlyh.hudson.tools.jobcreator.model.Pipeline;
 import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.parsers.ParserConfigurationException;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 
@@ -35,11 +34,12 @@ public class Program {
     try {
       parser.parseArgument(args);
       // reconfigure logging
+
       for (Handler handler : Logger.getLogger("").getHandlers()) {
-        handler.setFormatter(new LogFormatter());
+        handler.setFormatter(new LogFormatter());        
       }
-      XmlHandler xmlHandler = new XmlHandler();
-      Pipeline pipeline = xmlHandler.loadPipeline(arguments.getPipeline());
+      Loader xmlHandler = new Loader(arguments);
+      Pipeline pipeline = xmlHandler.loadPipeline();
       Resolver resolver = new Resolver(arguments, pipeline);
       resolver.resolve();
 
