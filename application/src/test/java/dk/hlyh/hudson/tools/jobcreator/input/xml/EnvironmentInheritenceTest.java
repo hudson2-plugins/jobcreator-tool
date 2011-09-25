@@ -43,6 +43,7 @@ public class EnvironmentInheritenceTest {
     Assert.assertEquals(prop3.getValue(),"valueB");
     Assert.assertEquals(prop3.getPropagation(), Propagation.Upstream);
     Assert.assertEquals(prop3.getMerging(), Merge.Append);
+    Assert.assertEquals(pipeline.getJobs().size(),4);
   }
   
   @Test
@@ -64,6 +65,7 @@ public class EnvironmentInheritenceTest {
     Assert.assertEquals(prop3.getValue(),"value3");
     Assert.assertEquals(prop3.getPropagation(), Propagation.Downstream);
     Assert.assertEquals(prop3.getMerging(), Merge.Prefix);
+    Assert.assertEquals(pipeline.getJobs().size(),5);
   }
   
   @Test

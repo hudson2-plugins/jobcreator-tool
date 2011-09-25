@@ -10,8 +10,10 @@
  */
 package dk.hlyh.hudson.tools.jobcreator.input.xml.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.xml.bind.annotation.*;
@@ -23,13 +25,13 @@ public class Job {
   @XmlElement(required = true)
   private String name;
   
-  @XmlElement(required = true)
+  @XmlElement(required = false)
   private String template;
   
   @XmlElementWrapper(name = "inherit")
   @XmlElement(name = "job")
   @XmlIDREF
-  private Set<Job> parentJobs;
+  private List<Job> parentJobs;
    
   @XmlElementWrapper(name = "downstream")
   @XmlElement(name = "job")
@@ -71,9 +73,9 @@ public class Job {
     return downstreamJobs;
   }
 
-  public Set<Job> getParentJobs() {
+  public List<Job> getParentJobs() {
     if (parentJobs == null) {
-      parentJobs = new HashSet<Job>();
+      parentJobs = new ArrayList<Job>();
     }
     return parentJobs;
   }

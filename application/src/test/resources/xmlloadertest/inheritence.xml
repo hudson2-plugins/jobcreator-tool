@@ -9,6 +9,8 @@
       <outputPattern>${pipeline}_${environment}_${job}</outputPattern>
       <include>
         <job>job1</job>
+        <job>job3</job>
+        <job>job6</job>
       </include>
       <properties>
         <name>global</name>
@@ -21,8 +23,14 @@
       <name>parent2</name>
       <outputPattern>${pipeline}_${job}</outputPattern>
       <include>
-        <job>job1</job>
-      </include>    
+        <job>job2</job>
+        <job>job4</job>
+        <job>job5</job>
+      </include> 
+      <exclude>
+        <job>job6</job>
+        <job>job5</job>
+      </exclude>
       <properties>
         <name>global</name>
         <property name="env2-dsds" >dsdsad</property>
@@ -63,5 +71,31 @@
       <name>job1</name>
       <template>template1.ftl</template>      
     </job>
+    <job>
+      <name>job2</name>
+      <template>template2.ftl</template>      
+    </job>
+    <job>
+      <name>job3</name>
+      <inherit>
+        <job>job1</job>
+        <job>job2</job>
+      </inherit>
+    </job>
+    <job>
+      <name>job4</name>
+      <inherit>
+        <job>job2</job>        
+        <job>job1</job>    
+      </inherit>
+    </job>
+    <job>
+      <name>job5</name>
+      <template>template1.ftl</template>      
+    </job>
+    <job>
+      <name>job6</name>
+      <template>template1.ftl</template>      
+    </job>      
   </jobs>
 </ns1:pipeline>
