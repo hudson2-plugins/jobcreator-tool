@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-public class FreemarkerHelper {
+public final class FreemarkerHelper {
 
   private static Configuration freeMarkerConfiguration;
 

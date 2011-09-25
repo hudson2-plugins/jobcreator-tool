@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class TemplateValuesBuilder {
 
   private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-  private Map<String, Object> values;
+  private final Map<String, Object> values;
 
   public TemplateValuesBuilder() {
     values = new HashMap<String, Object>();
