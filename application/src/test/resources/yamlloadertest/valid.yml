@@ -1,0 +1,39 @@
+name: hello
+
+imports:
+  - file: ddd.yml
+  - file: fff.yml
+  
+jobs:    
+ - name: hello
+    
+ - name: ffff
+
+   properties:
+     dsds: fdff
+     
+environments: 
+  - name: fdfds
+    included: 
+     - job: job1
+     - job: job2
+    excluded: 
+      - job: job3
+    parents:
+      - environment: 
+    propertyset:
+      - name: global
+        properties:
+          dsadas: d
+          dsad: c
+      - name: job1
+        properties:
+          dsadas: d
+          dsad: c
+      
+      
+      
+      
+  - name: fdsfds
+        
+      

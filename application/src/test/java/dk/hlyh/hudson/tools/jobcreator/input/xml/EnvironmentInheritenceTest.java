@@ -29,7 +29,7 @@ public class EnvironmentInheritenceTest {
     Arguments args = new Arguments();
     args.setInput(new File(resource.getFile()));
     args.setEnvironment("p1-first");
-    Loader handler = new Loader(args);
+    XmlLoader handler = new XmlLoader(args);
     
     Pipeline pipeline = handler.loadPipeline();
     Assert.assertNotNull(pipeline);
@@ -52,7 +52,7 @@ public class EnvironmentInheritenceTest {
     Arguments args = new Arguments();
     args.setInput(new File(resource.getFile()));
     args.setEnvironment("p2-first");
-    Loader handler = new Loader(args);
+    XmlLoader handler = new XmlLoader(args);
     Pipeline pipeline = handler.loadPipeline();
     Assert.assertNotNull(pipeline);
     Environment env = pipeline.getEnvironment();
@@ -74,7 +74,7 @@ public class EnvironmentInheritenceTest {
     Arguments args = new Arguments();
     args.setInput(new File(resource.getFile()));
     args.setEnvironment("local-first");
-    Loader handler = new Loader(args);
+    XmlLoader handler = new XmlLoader(args);
     Pipeline pipeline = handler.loadPipeline();
     Assert.assertNotNull(pipeline);
     Assert.assertEquals(pipeline.getEnvironment().getOutputPattern(), "${pipeline}");

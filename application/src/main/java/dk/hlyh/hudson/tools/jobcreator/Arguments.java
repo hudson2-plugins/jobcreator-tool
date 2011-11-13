@@ -120,6 +120,6 @@ public class Arguments {
     
   public enum InputFormat {
     xmlv1,
-    yaml,    
+    //yaml,    
   }
 }

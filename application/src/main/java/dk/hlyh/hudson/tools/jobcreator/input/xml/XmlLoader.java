@@ -19,8 +19,6 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -31,7 +29,7 @@ import javax.xml.validation.SchemaFactory;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-public class Loader {
+public class XmlLoader {
 
   private static final String SCHEMA_FILE = "/jobcreator-v1.xsd";
   private static final Class ROOT_NODE = dk.hlyh.hudson.tools.jobcreator.input.xml.model.Pipeline.class;
@@ -40,13 +38,13 @@ public class Loader {
   private JobTransformer jobTransformer = new JobTransformer();
   private RelationshipManager relationShipManager = new RelationshipManager();
 
-  public Loader(Arguments args) {
+  public XmlLoader(Arguments args) {
     super();
     this.arguments = args;
   }
 
   public dk.hlyh.hudson.tools.jobcreator.model.Pipeline loadPipeline() {
-    LogFacade.info("Loading pipeline definition using xml version 1 formar");
+    LogFacade.info("Loading pipeline definition using xml version 1 format");
 
     dk.hlyh.hudson.tools.jobcreator.model.Environment activeEnvironment = null;
     List<dk.hlyh.hudson.tools.jobcreator.model.Job> activeJobs = new ArrayList<dk.hlyh.hudson.tools.jobcreator.model.Job>();
@@ -109,7 +107,7 @@ public class Loader {
   private Schema loadSchema() {
     try {
       SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-      URL schemaUrl = Loader.class.getResource(SCHEMA_FILE);
+      URL schemaUrl = XmlLoader.class.getResource(SCHEMA_FILE);
       if (schemaUrl == null) {
         throw new ImportException("Could not find schema file " + SCHEMA_FILE);
       }

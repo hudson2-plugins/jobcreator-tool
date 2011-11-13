@@ -30,7 +30,7 @@ public class JobInheritenceTest {
     Arguments args = new Arguments();
     args.setInput(new File(resource.getFile()));
     args.setEnvironment("p1-first");
-    Loader handler = new Loader(args);
+    XmlLoader handler = new XmlLoader(args);
     
     Pipeline pipeline = handler.loadPipeline();
     Assert.assertNotNull(pipeline);
@@ -51,7 +51,7 @@ public class JobInheritenceTest {
     Arguments args = new Arguments();
     args.setInput(new File(resource.getFile()));
     args.setEnvironment("p1-first");
-    Loader handler = new Loader(args);
+    XmlLoader handler = new XmlLoader(args);
     Pipeline pipeline = handler.loadPipeline();
     Assert.assertNotNull(pipeline);
     Job foundJob = null;

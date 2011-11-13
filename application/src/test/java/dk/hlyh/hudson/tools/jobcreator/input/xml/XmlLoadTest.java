@@ -24,7 +24,7 @@ public class XmlLoadTest {
     URL resource = this.getClass().getResource("/xmlloadertest/valid.xml");
     Arguments args = new Arguments();
     args.setInput(new File(resource.getFile()));
-    Loader handler = new Loader(args);
+    XmlLoader handler = new XmlLoader(args);
     Assert.assertNotNull(handler.loadXml());
   } 
 
@@ -33,14 +33,14 @@ public class XmlLoadTest {
     URL resource = this.getClass().getResource("/xmlloadertest/invalid.xml");
     Arguments args = new Arguments();
     args.setInput(new File(resource.getFile()));
-    Loader handler = new Loader(args);
+    XmlLoader handler = new XmlLoader(args);
     handler.loadXml();
   }
 
   @Test(expectedExceptions = ImportException.class)
   public void loadNullFile() throws ImportException {
     Arguments args = new Arguments();
-    Loader handler = new Loader(args);
+    XmlLoader handler = new XmlLoader(args);
     handler.loadXml();
   }
 
@@ -48,7 +48,7 @@ public class XmlLoadTest {
   public void loadNonExistingFile() throws ImportException {
     Arguments args = new Arguments();
     args.setInput(new File("notthere.xsd"));
-    Loader handler = new Loader(args);
+    XmlLoader handler = new XmlLoader(args);
     handler.loadXml();
   }
 }

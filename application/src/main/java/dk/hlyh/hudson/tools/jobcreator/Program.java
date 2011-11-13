@@ -11,8 +11,9 @@
 package dk.hlyh.hudson.tools.jobcreator;
 
 import dk.hlyh.hudson.tools.jobcreator.helper.LogFacade;
-import dk.hlyh.hudson.tools.jobcreator.input.xml.Loader;
+import dk.hlyh.hudson.tools.jobcreator.input.xml.XmlLoader;
 import dk.hlyh.hudson.tools.jobcreator.helper.LogFormatter;
+import dk.hlyh.hudson.tools.jobcreator.input.yaml.YamlLoader;
 import dk.hlyh.hudson.tools.jobcreator.model.Pipeline;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -65,18 +66,23 @@ public class Program {
     }
 
     // set our own formatter
+    LogFormatter formatter = new LogFormatter();
     for (Handler handler : Logger.getLogger("").getHandlers()) {
-      handler.setFormatter(new LogFormatter());
-    }
+      handler.setFormatter(formatter);
+    } 
 
     LogFacade.info("Program started using: {0}", arguments);
     
     Pipeline pipeline = null;
     switch (arguments.getInputFormat()) {
       case xmlv1:
-        Loader xmlHandler = new Loader(arguments);
+        XmlLoader xmlHandler = new XmlLoader(arguments);
         pipeline = xmlHandler.loadPipeline();
         break;
+//      case yaml:
+//        YamlLoader yamlHandler = new YamlLoader(arguments);
+//        pipeline = yamlHandler.loadPipeline();
+//        break;
       default:
         throw new ImportException("Inputformat '" + arguments.getInputFormat() + "' not yet supported");
     }
