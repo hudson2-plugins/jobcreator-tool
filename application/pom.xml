@@ -24,16 +24,7 @@
   <artifactId>jobcreator-application</artifactId>
   <packaging>jar</packaging>
   <name>Hudson Jobcreator Tool - Java Application</name>    
-       
-  <!-- license -->
-  <licenses>
-    <license>
-      <name>Eclipse Public License - v 1.0</name>
-      <url>http://www.eclipse.org/org/documents/epl-v10.html</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
-                
+                       
   <build>
     <resources>
       <resource>
@@ -49,31 +40,7 @@
           <source>1.6</source>
           <target>1.6</target>
         </configuration>
-      </plugin>      
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>1.4</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <shadedArtifactAttached>true</shadedArtifactAttached>
-              <shadedClassifierName>full</shadedClassifierName>
-              <transformers>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <manifestEntries>
-                    <Main-Class>dk.hlyh.hudson.tools.jobcreator.Program</Main-Class>
-                  </manifestEntries>
-                </transformer>
-              </transformers>
-            </configuration>
-          </execution>
-        </executions>        
-      </plugin>      
+      </plugin>         
       <plugin>
         <groupId>com.sun.tools.jxc.maven2</groupId>
         <artifactId>maven-jaxb-schemagen-plugin</artifactId>

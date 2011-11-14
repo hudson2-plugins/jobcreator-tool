@@ -20,7 +20,7 @@
   <packaging>pom</packaging>
     
   <!-- Information -->
-  <name>Hudson Jobcreator Tool</name>    
+  <name>Hudson Jobcreator</name>    
   <url>https://github.com/hudson-plugins/jobcreator-tool</url>
     
   <!-- license -->
@@ -66,5 +66,6 @@
                 
   <modules>
     <module>application</module>
+    <module>distribution</module>
   </modules>
 </project>
