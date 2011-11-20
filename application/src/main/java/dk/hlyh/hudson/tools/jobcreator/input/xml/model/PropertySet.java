@@ -11,14 +11,15 @@
 package dk.hlyh.hudson.tools.jobcreator.input.xml.model;
 
 import java.util.Set;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlType
 public class PropertySet {
 
-  @XmlElement(required=true)
-  private String name;
+  @XmlAttribute()
+  private String job;
   
   @XmlElement(name = "property")
   private Set<Property> properties;
@@ -27,8 +28,8 @@ public class PropertySet {
     super();
   }
   
-  public String getName() {
-    return name;
+  public String getJob() {
+    return job != null && job.trim().length() > 0 ? job : dk.hlyh.hudson.tools.jobcreator.model.PropertySet.GLOBAL_SET;
   }
 
   public Set<Property> getProperties() {
@@ -44,7 +45,7 @@ public class PropertySet {
       return false;
     }
     final PropertySet other = (PropertySet) obj;
-    if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+    if ((this.job == null) ? (other.job != null) : !this.job.equals(other.job)) {
       return false;
     }
     return true;
@@ -53,13 +54,13 @@ public class PropertySet {
   @Override
   public int hashCode() {
     int hash = 7;
-    hash = 29 * hash + (this.name != null ? this.name.hashCode() : 0);
+    hash = 29 * hash + (this.job != null ? this.job.hashCode() : 0);
     return hash;
   }
 
   @Override
   public String toString() {
-    return "PropertySet{" + "name=" + name + ", properties=" + properties + '}';
+    return "PropertySet{" + "job=" + job + ", properties=" + properties + '}';
   }
   
   

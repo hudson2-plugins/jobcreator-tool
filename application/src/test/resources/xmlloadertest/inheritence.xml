@@ -4,24 +4,19 @@
    xsi:schemaLocation='hudsonci.jobcreator.v1 file:/home/henrik/source-code/jobcreator-tool/application/target/schemas/jobcreator-v1.xsd'>
   <name>example</name>
   <environments>
-    <environment>
-      <name>parent1</name>
-      <outputPattern>${pipeline}_${environment}_${job}</outputPattern>
+    <environment name="parent1" pattern="${pipeline}_${environment}_${job}">
       <include>
         <job>job1</job>
         <job>job3</job>
         <job>job6</job>
       </include>
-      <properties>
-        <name>global</name>
+      <propertyset>
         <property name="prop_1">value1</property>
         <property name="prop_2">value2</property>
         <property name="prop_3" propagation="downstream" merge="prefix">value3</property>
-      </properties>
+      </propertyset>
     </environment>
-    <environment>
-      <name>parent2</name>
-      <outputPattern>${pipeline}_${job}</outputPattern>
+    <environment name="parent2" pattern="${pipeline}_${job}">
       <include>
         <job>job2</job>
         <job>job4</job>
@@ -31,71 +26,53 @@
         <job>job6</job>
         <job>job5</job>
       </exclude>
-      <properties>
-        <name>global</name>
-        <property name="env2-dsds" >dsdsad</property>
+      <propertyset>
+        <property name="env2-dsds">dsdsad</property>
         <property name="prop_1" >valueA</property>
         <property name="prop_3" propagation="upstream" merge="append">valueB</property>
-      </properties> 
+      </propertyset> 
     </environment>
     
-    <environment>
-      <name>p1-first</name>  
-      <inherit>
-        <environment>parent1</environment>
-        <environment>parent2</environment>             
-      </inherit>
-      <properties>
-        <name>global</name>
+    <environment name="p1-first">
+      <parents>
+        <parent>parent1</parent>
+        <parent>parent2</parent>             
+      </parents>
+      <propertyset>
         <property name="prop_2" />
-      </properties>       
+      </propertyset>       
     </environment>
-    <environment>
-      <name>p2-first</name>  
-      <inherit>
-        <environment>parent2</environment>
-        <environment>parent1</environment>        
-      </inherit>
+    
+    <environment name="p2-first">
+      <parents>
+        <parent>parent2</parent>
+        <parent>parent1</parent>        
+      </parents>
     </environment>
-    <environment>
-      <name>local-first</name>
-      <outputPattern>${pipeline}</outputPattern>
-      <inherit>
-        <environment>parent2</environment>
-        <environment>parent1</environment>        
-      </inherit>      
+    
+    <environment name="local-first" pattern="${pipeline}">
+      <parents>
+        <parent>parent2</parent>
+        <parent>parent1</parent>        
+      </parents>      
     </environment>     
   </environments>
   <jobs>
-    <job>
-      <name>job1</name>
-      <template>template1.ftl</template>      
+    <job name="job1" template="template1.ftl" />
+    <job name="job2" template="template2.ftl" />
+    <job name="job3">
+      <parents>
+        <parent>job1</parent>
+        <parent>job2</parent>
+      </parents>
     </job>
-    <job>
-      <name>job2</name>
-      <template>template2.ftl</template>      
+    <job name="job4">
+      <parents>
+        <parent>job2</parent>        
+        <parent>job1</parent>    
+      </parents>
     </job>
-    <job>
-      <name>job3</name>
-      <inherit>
-        <job>job1</job>
-        <job>job2</job>
-      </inherit>
-    </job>
-    <job>
-      <name>job4</name>
-      <inherit>
-        <job>job2</job>        
-        <job>job1</job>    
-      </inherit>
-    </job>
-    <job>
-      <name>job5</name>
-      <template>template1.ftl</template>      
-    </job>
-    <job>
-      <name>job6</name>
-      <template>template1.ftl</template>      
-    </job>      
+    <job name="job5" template="template1.ftl" />      
+    <job name="job6" template="template1.ftl" />
   </jobs>
 </ns1:pipeline>

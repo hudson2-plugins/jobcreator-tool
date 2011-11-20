@@ -56,7 +56,7 @@ public class Resolver {
     // Apply environment properties
     for (Job job : pipeline.getJobs()) {
 
-      PropertySet globalSet = activeEnvironment.getPropertySet("global");
+      PropertySet globalSet = activeEnvironment.getPropertySet(PropertySet.GLOBAL_SET);
       PropertySet jobSpecificSet = activeEnvironment.getPropertySet(job.getName());
       if (globalSet != null) {
         mergePropertySet(globalSet, job);

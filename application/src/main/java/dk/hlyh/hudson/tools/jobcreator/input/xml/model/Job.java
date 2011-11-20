@@ -22,14 +22,14 @@ import javax.xml.bind.annotation.*;
 public class Job {
 
   @XmlID
-  @XmlElement(required = true)
+  @XmlAttribute(required = true)
   private String name;
   
-  @XmlElement(required = false)
+  @XmlAttribute(required = false)
   private String template;
   
-  @XmlElementWrapper(name = "inherit")
-  @XmlElement(name = "job")
+  @XmlElementWrapper(name = "parents")
+  @XmlElement(name = "parent")
   @XmlIDREF
   private List<Job> parentJobs;
    
@@ -42,7 +42,7 @@ public class Job {
   @XmlIDREF
   private Job joinJob;
   
-  @XmlElementWrapper(name = "properties")
+  @XmlElementWrapper(name = "propertyset")
   @XmlElement(name = "property")
   private Set<Property> properties;
   

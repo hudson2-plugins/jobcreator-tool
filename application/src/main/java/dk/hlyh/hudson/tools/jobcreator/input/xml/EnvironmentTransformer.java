@@ -59,7 +59,7 @@ class EnvironmentTransformer {
 
     // handle property sets
     for (dk.hlyh.hudson.tools.jobcreator.input.xml.model.PropertySet sourceSet : sourceEnvironment.getProperties()) {
-      dk.hlyh.hudson.tools.jobcreator.model.PropertySet activeSet = activeEnvironment.getPropertySet(sourceSet.getName());
+      dk.hlyh.hudson.tools.jobcreator.model.PropertySet activeSet = activeEnvironment.getPropertySet(sourceSet.getJob());
 
       for (dk.hlyh.hudson.tools.jobcreator.input.xml.model.Property sourceProperty : sourceSet.getProperties()) {
         if (sourceProperty.getValue() == null || sourceProperty.getValue().length() == 0) {

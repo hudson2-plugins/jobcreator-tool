@@ -15,7 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PropertySet {
-  
+  public static final String GLOBAL_SET = "$$global$$";
+          
   private Map<String, Property> properties = new HashMap<String, Property>();
 
   public PropertySet() {

@@ -16,6 +16,7 @@ import dk.hlyh.hudson.tools.jobcreator.model.Merge;
 import dk.hlyh.hudson.tools.jobcreator.model.Pipeline;
 import dk.hlyh.hudson.tools.jobcreator.model.Propagation;
 import dk.hlyh.hudson.tools.jobcreator.model.Property;
+import dk.hlyh.hudson.tools.jobcreator.model.PropertySet;
 import java.io.File;
 import java.net.URL;
 import org.testng.Assert;
@@ -36,9 +37,9 @@ public class EnvironmentInheritenceTest {
     Environment env = pipeline.getEnvironment();
     
     Assert.assertEquals(env.getOutputPattern(), "${pipeline}_${job}");    
-    Assert.assertEquals(env.getPropertySet("global").getProperty("prop_1").getValue(),"valueA");
-    Assert.assertEquals(env.getPropertySet("global").getProperty("prop_2"),null);
-    Property prop3 = env.getPropertySet("global").getProperty("prop_3");
+    Assert.assertEquals(env.getPropertySet(PropertySet.GLOBAL_SET).getProperty("prop_1").getValue(),"valueA");
+    Assert.assertEquals(env.getPropertySet(PropertySet.GLOBAL_SET).getProperty("prop_2"),null);
+    Property prop3 = env.getPropertySet(PropertySet.GLOBAL_SET).getProperty("prop_3");
     Assert.assertNotNull(prop3);
     Assert.assertEquals(prop3.getValue(),"valueB");
     Assert.assertEquals(prop3.getPropagation(), Propagation.Upstream);
@@ -58,9 +59,9 @@ public class EnvironmentInheritenceTest {
     Environment env = pipeline.getEnvironment();
     
     Assert.assertEquals(env.getOutputPattern(), "${pipeline}_${environment}_${job}");    
-    Assert.assertEquals(env.getPropertySet("global").getProperty("prop_1").getValue(),"value1");
-    Assert.assertEquals(env.getPropertySet("global").getProperty("prop_2").getValue(),"value2");
-    Property prop3 = env.getPropertySet("global").getProperty("prop_3");
+    Assert.assertEquals(env.getPropertySet(PropertySet.GLOBAL_SET).getProperty("prop_1").getValue(),"value1");
+    Assert.assertEquals(env.getPropertySet(PropertySet.GLOBAL_SET).getProperty("prop_2").getValue(),"value2");
+    Property prop3 = env.getPropertySet(PropertySet.GLOBAL_SET).getProperty("prop_3");
     Assert.assertNotNull(prop3);
     Assert.assertEquals(prop3.getValue(),"value3");
     Assert.assertEquals(prop3.getPropagation(), Propagation.Downstream);

@@ -11,30 +11,28 @@
 package dk.hlyh.hudson.tools.jobcreator.input.xml.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlIDREF;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlType
 public class Environment {
 
   @XmlID
-  @XmlElement(required = true)
+  @XmlAttribute(required = true)
   private String name;
   
-  @XmlElement
+  @XmlAttribute(name="pattern")
   private String outputPattern;
   
-  @XmlElementWrapper(name = "inherit")
-  @XmlElement(name = "environment")
+  @XmlElementWrapper(name = "parents")
+  @XmlElement(name = "parent")
   @XmlIDREF
   private List<Environment> parentEnv;
   
@@ -48,9 +46,9 @@ public class Environment {
   @XmlIDREF
   private Set<Job> excludedJobs;
   
-  @XmlElement(name = "properties")
+  @XmlElement(name = "propertyset")
   private Set<PropertySet> properties;
-  
+    
   public Environment() {
     super();
   }

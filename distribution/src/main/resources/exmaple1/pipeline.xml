@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipe:pipeline  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+   xmlns:pipe='hudsonci.jobcreator.v1'
+   xsi:schemaLocation='hudsonci.jobcreator.v1 file:/mnt/nas/data/source-code/jobcreator-tool/application/target/schemas/jobcreator-v1.xsd'>
+  <name>example</name>
+  <environments>
+    <environment name="defaults" pattern="${env}-${job}">
+      <propertyset>
+        <property name="history.days">1</property>
+        <property name="history.builds">10</property>
+      </propertyset>
+    </environment>
+    
+    <environment name="test">
+      <parents>
+        <parent>defaults</parent>
+      </parents>
+      <include>
+        <job>deploy</job>
+      </include>
+    </environment>
+    
+    <environment name="dev">
+      <parents>
+        <parent>defaults</parent>
+      </parents>
+      <include>
+        <job>deploy</job>
+      </include>
+      <propertyset>
+        <property name="history.days">5</property>
+      </propertyset>
+    </environment>
+  </environments>
+  <jobs>
+    <job name="deploy" template="deploy.xml" />
+  </jobs>
+</pipe:pipeline>
