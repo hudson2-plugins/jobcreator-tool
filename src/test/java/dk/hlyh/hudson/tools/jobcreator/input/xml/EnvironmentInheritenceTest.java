@@ -38,7 +38,7 @@ public class EnvironmentInheritenceTest {
     
     Assert.assertEquals(env.getOutputPattern(), "${pipeline}_${job}");    
     Assert.assertEquals(env.getPropertySet(PropertySet.GLOBAL_SET).getProperty("prop_1").getValue(),"valueA");
-    Assert.assertEquals(env.getPropertySet(PropertySet.GLOBAL_SET).getProperty("prop_2"),null);
+    Assert.assertEquals(env.getPropertySet(PropertySet.GLOBAL_SET).getProperty("prop_2").getValue(),"");
     Property prop3 = env.getPropertySet(PropertySet.GLOBAL_SET).getProperty("prop_3");
     Assert.assertNotNull(prop3);
     Assert.assertEquals(prop3.getValue(),"valueB");
