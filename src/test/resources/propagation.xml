@@ -4,8 +4,8 @@
    xmlns:ns1='hudsonci.jobcreator.v1'
    xsi:schemaLocation='hudsonci.jobcreator.v1 file:/mnt/nas/data/source-code/hudson-jobcreator/target/schemas/jobcreator-v1.xsd'>
   <name>example</name>
-  <environments>
-    <environment>
+  <groups>
+    <group>
       <name>dev</name>
       <outputPattern>${pipeline}_${environment}_${job}</outputPattern>
       <include>
@@ -15,8 +15,8 @@
         <job>job4</job>
         <job>job5</job>
       </include>
-    </environment>
-  </environments>
+    </group>
+  </groups>
   <jobs>
     <job>
       <name>job1</name>

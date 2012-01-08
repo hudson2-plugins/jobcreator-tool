@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!--
-    Document   : newXMLDocument.xml
-    Created on : September 13, 2011, 9:11 PM
-    Author     : henrik
-    Description:
-        Purpose of the document follows.
--->
-
 <ns1:pipeline  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
    xmlns:ns1='hudsonci.jobcreator.v1'
    xsi:schemaLocation='hudsonci.jobcreator.v1 file:/mnt/nas/data/source-code/hudson-jobcreator/target/schemas/jobcreator-v1.xsd'>
   <name>example</name>
-  <environments>
-    <environment>
+  <groups>
+    <group>
       <name>dev-group</name>
       <outputPattern>${pipeline}_${environment}_${job}</outputPattern>
       <include>
@@ -24,8 +15,8 @@
         <property name="my.property" >value1</property>
         <property name="my.second">value2</property>
       </properties>
-    </environment>
-    <environment>
+    </group>
+    <group>
       <name>dev1</name>
       <inherit>
         <environment>dev-group</environment>
@@ -42,8 +33,8 @@
         <name>job2</name>
         <property name="env2-job-dsds" >dsdsad</property>
       </properties>      
-    </environment>
-  </environments>
+    </group>
+  </groups>
   <jobs>
     <job>
       <name>job1</name>

@@ -31,8 +31,8 @@ public class Group {
   @XmlAttribute(name="pattern")
   private String outputPattern;
   
-  @XmlElementWrapper(name = "parents")
-  @XmlElement(name = "parent")
+  @XmlElementWrapper(name = "inherit")
+  @XmlElement(name = "group")
   @XmlIDREF
   private List<Group> parentEnv;
   

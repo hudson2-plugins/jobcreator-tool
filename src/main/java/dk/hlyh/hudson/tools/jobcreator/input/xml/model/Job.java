@@ -11,10 +11,8 @@
 package dk.hlyh.hudson.tools.jobcreator.input.xml.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import javax.xml.bind.annotation.*;
 
@@ -28,8 +26,8 @@ public class Job {
   @XmlAttribute(required = false)
   private String template;
   
-  @XmlElementWrapper(name = "parents")
-  @XmlElement(name = "parent")
+  @XmlElementWrapper(name = "inherit")
+  @XmlElement(name = "job")
   @XmlIDREF
   private List<Job> parentJobs;
    

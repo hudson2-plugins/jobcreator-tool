@@ -21,8 +21,8 @@ public class Pipeline {
 
   @XmlElement(required = true)
   private String name;
-  @XmlElementWrapper(name = "environments")
-  @XmlElement(name = "environment")
+  @XmlElementWrapper(name = "groups")
+  @XmlElement(name = "group")
   private List<Group> environments;
   @XmlElementWrapper(name = "jobs")
   @XmlElement(name = "job")

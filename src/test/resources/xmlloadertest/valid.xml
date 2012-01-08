@@ -3,8 +3,8 @@
    xmlns:ns1='hudsonci.jobcreator.v1'
    xsi:schemaLocation='hudsonci.jobcreator.v1 file:/home/henrik/source-code/jobcreator-tool/application/target/schemas/jobcreator-v1.xsd'>
   <name>example</name>
-  <environments>
-    <environment name="dev-group" pattern="${pipeline}_${environment}_${job}">
+  <groups>
+    <group name="dev-group" pattern="${pipeline}_${environment}_${job}">
       <include>
         <job>job1</job>
       </include>
@@ -12,11 +12,11 @@
         <property name="my.property" >value1</property>
         <property name="my.second">value2</property>
       </propertyset>
-    </environment>
-    <environment name="dev1">
-      <parents>
-        <parent>dev-group</parent>
-      </parents>
+    </group>
+    <group name="dev1">
+      <inherit>
+        <group>dev-group</group>
+      </inherit>
       <include>
         <job>job2</job>
       </include>
@@ -26,8 +26,8 @@
       <propertyset job="job2">
         <property name="env2-job-dsds" >dsdsad</property>
       </propertyset>      
-    </environment>
-  </environments>
+    </group>
+  </groups>
   <jobs>
     <job name="job1" template="template1.ftl">
       <downstream>
