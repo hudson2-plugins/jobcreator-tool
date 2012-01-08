@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlType
-public class Environment {
+public class Group {
 
   @XmlID
   @XmlAttribute(required = true)
@@ -34,7 +34,7 @@ public class Environment {
   @XmlElementWrapper(name = "parents")
   @XmlElement(name = "parent")
   @XmlIDREF
-  private List<Environment> parentEnv;
+  private List<Group> parentEnv;
   
   @XmlElementWrapper(name = "include")
   @XmlElement(name = "job")
@@ -49,7 +49,7 @@ public class Environment {
   @XmlElement(name = "propertyset")
   private Set<PropertySet> properties;
     
-  public Environment() {
+  public Group() {
     super();
   }
   
@@ -57,9 +57,9 @@ public class Environment {
     return name;
   }
 
-  public List<Environment> getParentEnv() {
+  public List<Group> getParentEnv() {
     if (parentEnv == null) {
-      parentEnv = new ArrayList<Environment>();
+      parentEnv = new ArrayList<Group>();
     }
     return parentEnv;
   }
@@ -101,7 +101,7 @@ public class Environment {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    final Environment other = (Environment) obj;
+    final Group other = (Group) obj;
     if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
       return false;
     }

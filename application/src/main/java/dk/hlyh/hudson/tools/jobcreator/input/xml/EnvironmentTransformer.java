@@ -16,15 +16,15 @@ import java.util.List;
 class EnvironmentTransformer {
 
   private List<String> includedJobs = new ArrayList<String>();
-  private dk.hlyh.hudson.tools.jobcreator.model.Environment activeEnvironment;
+  private dk.hlyh.hudson.tools.jobcreator.model.Group activeEnvironment;
 
   EnvironmentTransformer() {
     super();
   }
 
-  void transformEnvironment(dk.hlyh.hudson.tools.jobcreator.input.xml.model.Environment sourceEnvironment) {
+  void transformEnvironment(dk.hlyh.hudson.tools.jobcreator.input.xml.model.Group sourceEnvironment) {
     String envName = sourceEnvironment.getName();
-    activeEnvironment = new dk.hlyh.hudson.tools.jobcreator.model.Environment(envName);
+    activeEnvironment = new dk.hlyh.hudson.tools.jobcreator.model.Group(envName);
     visitEnvironment(sourceEnvironment);
   }
 
@@ -32,13 +32,13 @@ class EnvironmentTransformer {
     return includedJobs;
   }
 
-  dk.hlyh.hudson.tools.jobcreator.model.Environment getActiveEnvironment() {
+  dk.hlyh.hudson.tools.jobcreator.model.Group getActiveEnvironment() {
     return activeEnvironment;
   }
 
-  private void visitEnvironment(dk.hlyh.hudson.tools.jobcreator.input.xml.model.Environment sourceEnvironment) {
+  private void visitEnvironment(dk.hlyh.hudson.tools.jobcreator.input.xml.model.Group sourceEnvironment) {
     // depth first 
-    for (dk.hlyh.hudson.tools.jobcreator.input.xml.model.Environment parent : sourceEnvironment.getParentEnv()) {
+    for (dk.hlyh.hudson.tools.jobcreator.input.xml.model.Group parent : sourceEnvironment.getParentEnv()) {
       visitEnvironment(parent);
     }
 

@@ -11,7 +11,7 @@
 package dk.hlyh.hudson.tools.jobcreator.input.xml;
 
 import dk.hlyh.hudson.tools.jobcreator.Arguments;
-import dk.hlyh.hudson.tools.jobcreator.model.Environment;
+import dk.hlyh.hudson.tools.jobcreator.model.Group;
 import dk.hlyh.hudson.tools.jobcreator.model.Job;
 import dk.hlyh.hudson.tools.jobcreator.model.Merge;
 import dk.hlyh.hudson.tools.jobcreator.model.Pipeline;

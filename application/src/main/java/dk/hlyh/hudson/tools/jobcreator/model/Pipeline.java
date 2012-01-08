@@ -16,16 +16,16 @@ import java.util.List;
 public class Pipeline {
   
   private final String name;
-  private final Environment environment;
+  private final Group environment;
   private final List<Job> jobs;
 
-  public Pipeline(String name, Environment environment, List<Job> jobs) {
+  public Pipeline(String name, Group environment, List<Job> jobs) {
     this.name = name;
     this.environment = environment;
     this.jobs = Collections.unmodifiableList(jobs);
   }
 
-  public Environment getEnvironment() {
+  public Group getEnvironment() {
     return environment;
   }
 

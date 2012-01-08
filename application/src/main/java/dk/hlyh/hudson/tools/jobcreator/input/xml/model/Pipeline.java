@@ -23,7 +23,7 @@ public class Pipeline {
   private String name;
   @XmlElementWrapper(name = "environments")
   @XmlElement(name = "environment")
-  private List<Environment> environments;
+  private List<Group> environments;
   @XmlElementWrapper(name = "jobs")
   @XmlElement(name = "job")
   private List<Job> jobs;
@@ -34,9 +34,9 @@ public class Pipeline {
 
   
   
-  public List<Environment> getEnvironments() {
+  public List<Group> getEnvironments() {
     if (environments == null) {
-      environments = new ArrayList<Environment>();
+      environments = new ArrayList<Group>();
     }
     return environments;
   }

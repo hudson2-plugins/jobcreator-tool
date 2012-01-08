@@ -13,13 +13,13 @@ package dk.hlyh.hudson.tools.jobcreator.model;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Environment {
+public class Group {
 
   private final String name;
   private String outputPattern;
   private Map<String, PropertySet> propertySets = new HashMap<String, PropertySet>();
 
-  public Environment(String name) {
+  public Group(String name) {
     super();
     this.name = name;
   }
@@ -53,7 +53,7 @@ public class Environment {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    final Environment other = (Environment) obj;
+    final Group other = (Group) obj;
     if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
       return false;
     }

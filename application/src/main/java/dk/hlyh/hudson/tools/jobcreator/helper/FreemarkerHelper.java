@@ -11,7 +11,7 @@
 package dk.hlyh.hudson.tools.jobcreator.helper;
 
 import dk.hlyh.hudson.tools.jobcreator.ImportException;
-import dk.hlyh.hudson.tools.jobcreator.model.Environment;
+import dk.hlyh.hudson.tools.jobcreator.model.Group;
 import dk.hlyh.hudson.tools.jobcreator.model.Job;
 import dk.hlyh.hudson.tools.jobcreator.model.Pipeline;
 import freemarker.template.Configuration;
@@ -32,7 +32,7 @@ public final class FreemarkerHelper {
     super();
   }
 
-  public static void writeJob(File outputDirectory, Job job, Environment environment, TemplateValuesBuilder templateValues, Pipeline pipeline) throws ImportException {
+  public static void writeJob(File outputDirectory, Job job, Group environment, TemplateValuesBuilder templateValues, Pipeline pipeline) throws ImportException {
     try {
       // merge with template
       String outputName = environment.getOutputPattern();

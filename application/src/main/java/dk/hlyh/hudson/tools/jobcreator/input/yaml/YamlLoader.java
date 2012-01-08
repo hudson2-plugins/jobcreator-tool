@@ -13,7 +13,7 @@ package dk.hlyh.hudson.tools.jobcreator.input.yaml;
 import dk.hlyh.hudson.tools.jobcreator.Arguments;
 import dk.hlyh.hudson.tools.jobcreator.ImportException;
 import dk.hlyh.hudson.tools.jobcreator.helper.LogFacade;
-import dk.hlyh.hudson.tools.jobcreator.model.Environment;
+import dk.hlyh.hudson.tools.jobcreator.model.Group;
 import dk.hlyh.hudson.tools.jobcreator.model.Pipeline;
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,8 +32,8 @@ import org.yaml.snakeyaml.Yaml;
 public class YamlLoader {
 
   private transient final Arguments arguments;
-  private Map<String, Environment> foundEnvironments = new HashMap<String, Environment>();
-  private Map<String, Environment> foundJobs = new HashMap<String, Environment>();  
+  private Map<String, Group> foundEnvironments = new HashMap<String, Group>();
+  private Map<String, Group> foundJobs = new HashMap<String, Group>();  
   private String pipelineName = "unknown";
   private List<String> activeJobNames = new ArrayList<String>();
           
@@ -49,7 +49,7 @@ public class YamlLoader {
   public Pipeline loadPipeline() {
     LogFacade.info("Loading pipeline definition using yaml version 1 format");
 
-    dk.hlyh.hudson.tools.jobcreator.model.Environment activeEnvironment = null;
+    dk.hlyh.hudson.tools.jobcreator.model.Group activeEnvironment = null;
     List<dk.hlyh.hudson.tools.jobcreator.model.Job> activeJobs = new ArrayList<dk.hlyh.hudson.tools.jobcreator.model.Job>();
 
     Deque<Map<String, Object>> loadedFiles = new ArrayDeque<Map<String, Object>>();

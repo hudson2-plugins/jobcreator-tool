@@ -46,14 +46,14 @@ public class XmlLoader {
   public dk.hlyh.hudson.tools.jobcreator.model.Pipeline loadPipeline() {
     LogFacade.info("Loading pipeline definition using xml version 1 format");
 
-    dk.hlyh.hudson.tools.jobcreator.model.Environment activeEnvironment = null;
+    dk.hlyh.hudson.tools.jobcreator.model.Group activeEnvironment = null;
     List<dk.hlyh.hudson.tools.jobcreator.model.Job> activeJobs = new ArrayList<dk.hlyh.hudson.tools.jobcreator.model.Job>();
 
     // Load and unmarshal the xml file
     dk.hlyh.hudson.tools.jobcreator.input.xml.model.Pipeline sourcePipeline = loadXml();
 
     // find the environment to generate
-    dk.hlyh.hudson.tools.jobcreator.input.xml.model.Environment sourceEnv = Utils.findEnvironment(sourcePipeline, arguments.getEnvironment());
+    dk.hlyh.hudson.tools.jobcreator.input.xml.model.Group sourceEnv = Utils.findEnvironment(sourcePipeline, arguments.getEnvironment());
     if (sourceEnv == null) {
       throw new ImportException("Environment '"+arguments.getEnvironment()+"' not found");
     }

@@ -11,7 +11,7 @@
 package dk.hlyh.hudson.tools.jobcreator.input.xml;
 
 import dk.hlyh.hudson.tools.jobcreator.Arguments;
-import dk.hlyh.hudson.tools.jobcreator.model.Environment;
+import dk.hlyh.hudson.tools.jobcreator.model.Group;
 import dk.hlyh.hudson.tools.jobcreator.model.Merge;
 import dk.hlyh.hudson.tools.jobcreator.model.Pipeline;
 import dk.hlyh.hudson.tools.jobcreator.model.Propagation;
@@ -34,7 +34,7 @@ public class EnvironmentInheritenceTest {
     
     Pipeline pipeline = handler.loadPipeline();
     Assert.assertNotNull(pipeline);
-    Environment env = pipeline.getEnvironment();
+    Group env = pipeline.getEnvironment();
     
     Assert.assertEquals(env.getOutputPattern(), "${pipeline}_${job}");    
     Assert.assertEquals(env.getPropertySet(PropertySet.GLOBAL_SET).getProperty("prop_1").getValue(),"valueA");
@@ -56,7 +56,7 @@ public class EnvironmentInheritenceTest {
     XmlLoader handler = new XmlLoader(args);
     Pipeline pipeline = handler.loadPipeline();
     Assert.assertNotNull(pipeline);
-    Environment env = pipeline.getEnvironment();
+    Group env = pipeline.getEnvironment();
     
     Assert.assertEquals(env.getOutputPattern(), "${pipeline}_${environment}_${job}");    
     Assert.assertEquals(env.getPropertySet(PropertySet.GLOBAL_SET).getProperty("prop_1").getValue(),"value1");

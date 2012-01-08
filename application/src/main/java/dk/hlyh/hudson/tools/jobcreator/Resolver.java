@@ -15,7 +15,7 @@ import dk.hlyh.hudson.tools.jobcreator.helper.TemplateValuesBuilder;
 
 import dk.hlyh.hudson.tools.jobcreator.model.Propagation;
 import dk.hlyh.hudson.tools.jobcreator.model.Property;
-import dk.hlyh.hudson.tools.jobcreator.model.Environment;
+import dk.hlyh.hudson.tools.jobcreator.model.Group;
 import dk.hlyh.hudson.tools.jobcreator.model.Job;
 import dk.hlyh.hudson.tools.jobcreator.model.Pipeline;
 import dk.hlyh.hudson.tools.jobcreator.model.PropertySet;
@@ -47,7 +47,7 @@ public class Resolver {
   public void resolve() throws ImportException {
 
     FreemarkerHelper.setupFreemarker(arguments.getTemplateDirectory());
-    Environment activeEnvironment = pipeline.getEnvironment();
+    Group activeEnvironment = pipeline.getEnvironment();
     List<Job> activeJobs = pipeline.getJobs();
 
     LOGGER.log(Level.INFO, "Active environment: {0}", activeEnvironment.getName());

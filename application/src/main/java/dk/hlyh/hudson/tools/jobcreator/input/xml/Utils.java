@@ -46,8 +46,8 @@ final class Utils {
     }
   }
 
-  static dk.hlyh.hudson.tools.jobcreator.input.xml.model.Environment findEnvironment(dk.hlyh.hudson.tools.jobcreator.input.xml.model.Pipeline sourcePipeline, String name) {
-    for (dk.hlyh.hudson.tools.jobcreator.input.xml.model.Environment currentEnvironment : sourcePipeline.getEnvironments()) {
+  static dk.hlyh.hudson.tools.jobcreator.input.xml.model.Group findEnvironment(dk.hlyh.hudson.tools.jobcreator.input.xml.model.Pipeline sourcePipeline, String name) {
+    for (dk.hlyh.hudson.tools.jobcreator.input.xml.model.Group currentEnvironment : sourcePipeline.getEnvironments()) {
       if (currentEnvironment.getName().equals(name)) {
         return currentEnvironment;
       }
