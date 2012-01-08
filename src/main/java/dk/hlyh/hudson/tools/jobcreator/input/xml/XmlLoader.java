@@ -34,7 +34,7 @@ public class XmlLoader {
   private static final String SCHEMA_FILE = "/jobcreator-v1.xsd";
   private static final Class ROOT_NODE = dk.hlyh.hudson.tools.jobcreator.input.xml.model.Pipeline.class;
   private final Arguments arguments;
-  private EnvironmentTransformer envTransformer = new EnvironmentTransformer();
+  private GroupTransformer envTransformer = new GroupTransformer();
   private JobTransformer jobTransformer = new JobTransformer();
   private RelationshipManager relationShipManager = new RelationshipManager();
 
@@ -46,20 +46,20 @@ public class XmlLoader {
   public dk.hlyh.hudson.tools.jobcreator.model.Pipeline loadPipeline() {
     LogFacade.info("Loading pipeline definition using xml version 1 format");
 
-    dk.hlyh.hudson.tools.jobcreator.model.Group activeEnvironment = null;
+    dk.hlyh.hudson.tools.jobcreator.model.Group activeGroup = null;
     List<dk.hlyh.hudson.tools.jobcreator.model.Job> activeJobs = new ArrayList<dk.hlyh.hudson.tools.jobcreator.model.Job>();
 
     // Load and unmarshal the xml file
     dk.hlyh.hudson.tools.jobcreator.input.xml.model.Pipeline sourcePipeline = loadXml();
 
     // find the environment to generate
-    dk.hlyh.hudson.tools.jobcreator.input.xml.model.Group sourceEnv = Utils.findEnvironment(sourcePipeline, arguments.getEnvironment());
+    dk.hlyh.hudson.tools.jobcreator.input.xml.model.Group sourceEnv = Utils.findGroup(sourcePipeline, arguments.getEnvironment());
     if (sourceEnv == null) {
       throw new ImportException("Environment '"+arguments.getEnvironment()+"' not found");
     }
     // Build the active environment by collapsing the inheritence tree
     envTransformer.transformEnvironment(sourceEnv);
-    activeEnvironment = envTransformer.getActiveEnvironment();
+    activeGroup = envTransformer.getActiveEnvironment();
 
     // for each job, build the job by collapsing the inheritence tree
     for (String jobName : envTransformer.getIncludedJobs()) {
@@ -70,7 +70,7 @@ public class XmlLoader {
     // set the upstream/downstream relationships
     relationShipManager.setRelationships(activeJobs, sourcePipeline);
 
-    dk.hlyh.hudson.tools.jobcreator.model.Pipeline activePipeline = new dk.hlyh.hudson.tools.jobcreator.model.Pipeline(sourcePipeline.getName(), activeEnvironment, activeJobs);
+    dk.hlyh.hudson.tools.jobcreator.model.Pipeline activePipeline = new dk.hlyh.hudson.tools.jobcreator.model.Pipeline(sourcePipeline.getName(), activeGroup, activeJobs);
     return activePipeline;
   }
 

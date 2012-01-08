@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlEnumValue;
 
 @XmlEnum
 public enum Merge {
-    
-    @XmlEnumValue(value="leave")
-    Leave,
+       
+    @XmlEnumValue(value="skip")
+    Skip,
       
     @XmlEnumValue(value="replace")
     Replace,

@@ -13,12 +13,12 @@ package dk.hlyh.hudson.tools.jobcreator.input.xml;
 import java.util.ArrayList;
 import java.util.List;
 
-class EnvironmentTransformer {
+class GroupTransformer {
 
   private List<String> includedJobs = new ArrayList<String>();
   private dk.hlyh.hudson.tools.jobcreator.model.Group activeEnvironment;
 
-  EnvironmentTransformer() {
+  GroupTransformer() {
     super();
   }
 

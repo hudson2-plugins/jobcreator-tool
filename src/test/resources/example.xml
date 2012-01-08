@@ -19,7 +19,7 @@
     <group>
       <name>dev1</name>
       <inherit>
-        <environment>dev-group</environment>
+        <group>dev-group</group>
       </inherit>
       <include>
         <job>job2</job>

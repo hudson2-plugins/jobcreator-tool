@@ -33,7 +33,7 @@ final class Utils {
 
   static dk.hlyh.hudson.tools.jobcreator.model.Merge convertMerging(dk.hlyh.hudson.tools.jobcreator.input.xml.model.Merge sourceMerge) {
     switch (sourceMerge) {
-      case Leave:
+      case Skip:
         return dk.hlyh.hudson.tools.jobcreator.model.Merge.Leave;
       case Replace:
         return dk.hlyh.hudson.tools.jobcreator.model.Merge.Replace;
@@ -46,7 +46,7 @@ final class Utils {
     }
   }
 
-  static dk.hlyh.hudson.tools.jobcreator.input.xml.model.Group findEnvironment(dk.hlyh.hudson.tools.jobcreator.input.xml.model.Pipeline sourcePipeline, String name) {
+  static dk.hlyh.hudson.tools.jobcreator.input.xml.model.Group findGroup(dk.hlyh.hudson.tools.jobcreator.input.xml.model.Pipeline sourcePipeline, String name) {
     for (dk.hlyh.hudson.tools.jobcreator.input.xml.model.Group currentEnvironment : sourcePipeline.getEnvironments()) {
       if (currentEnvironment.getName().equals(name)) {
         return currentEnvironment;

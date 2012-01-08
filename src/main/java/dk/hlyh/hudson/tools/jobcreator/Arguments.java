@@ -27,7 +27,7 @@ public class Arguments {
   @Option(name = "--output", aliases="-o", required = true, usage = "output directory")
   private File outputDirectory;
   
-  @Option(name = "--environment", aliases="-e", required = true, usage = "Environemnt to load")
+  @Option(name = "--group", aliases="-g", required = true, usage = "Group to load")
   private String environment;
   
   @Option(name = "--override", required = false, usage = "Personal override file")
