@@ -12,7 +12,7 @@ package dk.hlyh.hudson.tools.jobcreator.model;
 
 public enum Merge {
     
-    Leave,
+    Skip,
     Replace,
     Append,       
     Prefix    

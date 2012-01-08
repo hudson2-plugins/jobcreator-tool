@@ -35,11 +35,7 @@ public class Job {
   @XmlElement(name = "job")
   @XmlIDREF
   private Set<Job> downstreamJobs;
-  
-  @XmlElement(name = "join")
-  @XmlIDREF
-  private Job joinJob;
-  
+    
   @XmlElementWrapper(name = "propertyset")
   @XmlElement(name = "property")
   private Set<Property> properties;
@@ -83,10 +79,6 @@ public class Job {
       properties = new HashSet<Property>();
     }
     return properties;
-  }
-
-  public Job getJoinJob() {
-    return joinJob;
   }
 
   @Override

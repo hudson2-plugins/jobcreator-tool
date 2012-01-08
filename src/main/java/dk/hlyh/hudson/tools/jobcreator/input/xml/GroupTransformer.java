@@ -36,37 +36,35 @@ class GroupTransformer {
     return activeEnvironment;
   }
 
-  private void visitEnvironment(dk.hlyh.hudson.tools.jobcreator.input.xml.model.Group sourceEnvironment) {
+  /** Perform a depth first traversal of the group inheritance.
+   * @param sourceGroup The group to visit
+   */
+  private void visitEnvironment(dk.hlyh.hudson.tools.jobcreator.input.xml.model.Group sourceGroup) {
     // depth first 
-    for (dk.hlyh.hudson.tools.jobcreator.input.xml.model.Group parent : sourceEnvironment.getParentEnv()) {
+    for (dk.hlyh.hudson.tools.jobcreator.input.xml.model.Group parent : sourceGroup.getParentEnv()) {
       visitEnvironment(parent);
     }
 
     // handle output pattern
-    if (sourceEnvironment.getOutputPattern() != null && sourceEnvironment.getOutputPattern().trim().length() > 0) {
-      activeEnvironment.setOutputPattern(sourceEnvironment.getOutputPattern());
+    if (sourceGroup.getOutputPattern() != null && sourceGroup.getOutputPattern().trim().length() > 0) {
+      activeEnvironment.setOutputPattern(sourceGroup.getOutputPattern());
     }
 
     // handle included jobs
-    for (dk.hlyh.hudson.tools.jobcreator.input.xml.model.Job sourceJob : sourceEnvironment.getIncludedJobs()) {
+    for (dk.hlyh.hudson.tools.jobcreator.input.xml.model.Job sourceJob : sourceGroup.getIncludedJobs()) {
       includedJobs.add(sourceJob.getName());
     }
 
     // handle excluded jobs
-    for (dk.hlyh.hudson.tools.jobcreator.input.xml.model.Job sourceJob : sourceEnvironment.getExcludedJobs()) {
+    for (dk.hlyh.hudson.tools.jobcreator.input.xml.model.Job sourceJob : sourceGroup.getExcludedJobs()) {
       includedJobs.remove(sourceJob.getName());
     }
 
     // handle property sets
-    for (dk.hlyh.hudson.tools.jobcreator.input.xml.model.PropertySet sourceSet : sourceEnvironment.getProperties()) {
+    for (dk.hlyh.hudson.tools.jobcreator.input.xml.model.PropertySet sourceSet : sourceGroup.getProperties()) {
       dk.hlyh.hudson.tools.jobcreator.model.PropertySet activeSet = activeEnvironment.getPropertySet(sourceSet.getJob());
 
       for (dk.hlyh.hudson.tools.jobcreator.input.xml.model.Property sourceProperty : sourceSet.getProperties()) {
-        if (sourceProperty.getValue() == null || sourceProperty.getValue().length() == 0) {
-          activeSet.removeProperty(sourceProperty.getName());
-          continue;
-        }
-
         dk.hlyh.hudson.tools.jobcreator.model.Property activeProperty = activeSet.createProperty(sourceProperty.getName());
         activeProperty.setValue(sourceProperty.getValue());
         activeProperty.setPropagation(Utils.convertPropagation(sourceProperty.getPropagation()));

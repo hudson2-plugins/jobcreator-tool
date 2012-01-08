@@ -47,17 +47,17 @@ public class Resolver {
   public void resolve() throws ImportException {
 
     FreemarkerHelper.setupFreemarker(arguments.getTemplateDirectory());
-    Group activeEnvironment = pipeline.getEnvironment();
+    Group activeGroup = pipeline.getGroup();
     List<Job> activeJobs = pipeline.getJobs();
 
-    LOGGER.log(Level.INFO, "Active environment: {0}", activeEnvironment.getName());
+    LOGGER.log(Level.INFO, "Active environment: {0}", activeGroup.getName());
     LOGGER.log(Level.INFO, "Jobs to build: {0}", jobsAsString(activeJobs));
 
     // Apply environment properties
     for (Job job : pipeline.getJobs()) {
 
-      PropertySet globalSet = activeEnvironment.getPropertySet(PropertySet.GLOBAL_SET);
-      PropertySet jobSpecificSet = activeEnvironment.getPropertySet(job.getName());
+      PropertySet globalSet = activeGroup.getPropertySet(PropertySet.GLOBAL_SET);
+      PropertySet jobSpecificSet = activeGroup.getPropertySet(job.getName());
       if (globalSet != null) {
         mergePropertySet(globalSet, job);
       }
@@ -91,14 +91,11 @@ public class Resolver {
       builder.setProperty("import.jobs", jobsAsString(activeJobs));
       builder.setProperty("import.job.upstream", jobsAsString(job.getUpstream()));
       builder.setProperty("import.job.downstream", jobsAsString(job.getDownstream()));
-      if (job.getJoin() != null) {
-        builder.setProperty("import.job.join", job.getJoin().getName());
-      }
       for (Property property : job.getProperties()) {
         builder.setProperty(property.getKey(), property.getValue());
       }
 
-      FreemarkerHelper.writeJob(arguments.getOutputDirectory(), job, activeEnvironment, builder, pipeline);
+      FreemarkerHelper.writeJob(arguments.getOutputDirectory(), job, activeGroup, builder, pipeline);
       LOGGER.log(Level.INFO, "Completed job: {0}", job.getName());
     }
   }
@@ -120,10 +117,20 @@ public class Resolver {
     }
   }
 
+  /**
+   * Propagate the values according to the following rules.
+   * 1) For each of the known pushed properties
+   * 1.1) if the pushed property does not exist on the current job create it.
+   * 1.2) If exist and propagation set to none, stop propagation, but merge the value depending on the Merge setting.
+   * 1.3) if exist and propagation set to Upstream/Downstream stop propagation.
+   * @param pushedProperties
+   * @param job
+   * @param direction
+   * @return 
+   */
   private Map<String, Property> propagate(Map<String, Property> pushedProperties, Job job, Propagation direction) {
     LOGGER.log(Level.FINE, "Propagating for job {0}", job.getName());
     Map<String, Property> furtherPushedProperties = new HashMap<String, Property>();
-    //Map<String, Property> resolvedProperties = job.getProperties();
 
     // apply currently pushed properties
     List<String> toRemove = new ArrayList<String>();
@@ -140,13 +147,14 @@ public class Resolver {
       LOGGER.log(Level.FINE, "Propagation :" + currentProperty.getPropagation() + ", merging=" + currentProperty.getMerging());
       switch (currentProperty.getPropagation()) {
         case Upstream:
-        case None:
         case Downstream:
           toRemove.add(pushed.getKey());
           break;
+        case None:
+          toRemove.add(pushed.getKey());
         case Continue:
           switch (currentProperty.getMerging()) {
-            case Leave:
+            case Skip:
               // empty, don't replace existing values
               break;
             case Append:

@@ -22,7 +22,6 @@ public class Job {
   private String template;
   private Set<Job> upstream = new HashSet<Job>();
   private Set<Job> downstream = new HashSet<Job>();
-  private Job join;
   private PropertySet propertySet = new PropertySet();
   
   public Job(String name) {
@@ -49,15 +48,6 @@ public class Job {
   public Set<Job> getUpstream() {
     return upstream;
   }
-
-  public Job getJoin() {
-    return join;
-  }
-
-  public void setJoin(Job join) {
-    this.join = join;
-  }
-  
   
   public Collection<Property> getProperties() {
     return propertySet.getProperties();

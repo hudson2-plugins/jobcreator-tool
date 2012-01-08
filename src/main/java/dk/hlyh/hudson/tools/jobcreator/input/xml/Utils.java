@@ -34,7 +34,7 @@ final class Utils {
   static dk.hlyh.hudson.tools.jobcreator.model.Merge convertMerging(dk.hlyh.hudson.tools.jobcreator.input.xml.model.Merge sourceMerge) {
     switch (sourceMerge) {
       case Skip:
-        return dk.hlyh.hudson.tools.jobcreator.model.Merge.Leave;
+        return dk.hlyh.hudson.tools.jobcreator.model.Merge.Skip;
       case Replace:
         return dk.hlyh.hudson.tools.jobcreator.model.Merge.Replace;
       case Prefix:

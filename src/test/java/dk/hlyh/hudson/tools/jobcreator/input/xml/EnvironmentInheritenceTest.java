@@ -34,7 +34,7 @@ public class EnvironmentInheritenceTest {
     
     Pipeline pipeline = handler.loadPipeline();
     Assert.assertNotNull(pipeline);
-    Group env = pipeline.getEnvironment();
+    Group env = pipeline.getGroup();
     
     Assert.assertEquals(env.getOutputPattern(), "${pipeline}_${job}");    
     Assert.assertEquals(env.getPropertySet(PropertySet.GLOBAL_SET).getProperty("prop_1").getValue(),"valueA");
@@ -56,7 +56,7 @@ public class EnvironmentInheritenceTest {
     XmlLoader handler = new XmlLoader(args);
     Pipeline pipeline = handler.loadPipeline();
     Assert.assertNotNull(pipeline);
-    Group env = pipeline.getEnvironment();
+    Group env = pipeline.getGroup();
     
     Assert.assertEquals(env.getOutputPattern(), "${pipeline}_${environment}_${job}");    
     Assert.assertEquals(env.getPropertySet(PropertySet.GLOBAL_SET).getProperty("prop_1").getValue(),"value1");
@@ -78,7 +78,7 @@ public class EnvironmentInheritenceTest {
     XmlLoader handler = new XmlLoader(args);
     Pipeline pipeline = handler.loadPipeline();
     Assert.assertNotNull(pipeline);
-    Assert.assertEquals(pipeline.getEnvironment().getOutputPattern(), "${pipeline}");
+    Assert.assertEquals(pipeline.getGroup().getOutputPattern(), "${pipeline}");
   }   
   
 }

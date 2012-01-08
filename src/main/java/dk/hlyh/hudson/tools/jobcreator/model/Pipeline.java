@@ -16,17 +16,17 @@ import java.util.List;
 public class Pipeline {
   
   private final String name;
-  private final Group environment;
+  private final Group group;
   private final List<Job> jobs;
 
   public Pipeline(String name, Group environment, List<Job> jobs) {
     this.name = name;
-    this.environment = environment;
+    this.group = environment;
     this.jobs = Collections.unmodifiableList(jobs);
   }
 
-  public Group getEnvironment() {
-    return environment;
+  public Group getGroup() {
+    return group;
   }
 
   public List<Job> getJobs() {
@@ -39,6 +39,6 @@ public class Pipeline {
 
   @Override
   public String toString() {
-    return "Pipeline{" + "name=" + name + ", environment=" + environment + ", jobs=" + jobs + '}';
+    return "Pipeline{" + "name=" + name + ", environment=" + group + ", jobs=" + jobs + '}';
   }    
 }

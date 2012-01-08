@@ -27,15 +27,6 @@ public class RelationshipManager {
           activeDownStream.getUpstream().add(activeJob);
         }
       }
-
-      // join relationship
-      if (sourceJob.getJoinJob() != null) {
-        dk.hlyh.hudson.tools.jobcreator.model.Job activeJoin = findActiveJob(activeJobs, sourceJob.getJoinJob().getName());
-        if (activeJoin != null) {
-          activeJob.setJoin(activeJoin);
-        }
-      }
-
     }
   }
 

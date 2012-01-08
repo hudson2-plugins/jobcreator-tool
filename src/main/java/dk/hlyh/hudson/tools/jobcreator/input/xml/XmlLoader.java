@@ -34,9 +34,9 @@ public class XmlLoader {
   private static final String SCHEMA_FILE = "/jobcreator-v1.xsd";
   private static final Class ROOT_NODE = dk.hlyh.hudson.tools.jobcreator.input.xml.model.Pipeline.class;
   private final Arguments arguments;
-  private GroupTransformer envTransformer = new GroupTransformer();
-  private JobTransformer jobTransformer = new JobTransformer();
-  private RelationshipManager relationShipManager = new RelationshipManager();
+  private final GroupTransformer groupTransformer = new GroupTransformer();
+  private final JobTransformer jobTransformer = new JobTransformer();
+  private final RelationshipManager relationShipManager = new RelationshipManager();
 
   public XmlLoader(Arguments args) {
     super();
@@ -53,16 +53,16 @@ public class XmlLoader {
     dk.hlyh.hudson.tools.jobcreator.input.xml.model.Pipeline sourcePipeline = loadXml();
 
     // find the environment to generate
-    dk.hlyh.hudson.tools.jobcreator.input.xml.model.Group sourceEnv = Utils.findGroup(sourcePipeline, arguments.getEnvironment());
-    if (sourceEnv == null) {
-      throw new ImportException("Environment '"+arguments.getEnvironment()+"' not found");
+    dk.hlyh.hudson.tools.jobcreator.input.xml.model.Group sourceGroup = Utils.findGroup(sourcePipeline, arguments.getEnvironment());
+    if (sourceGroup == null) {
+      throw new ImportException("Group '"+arguments.getEnvironment()+"' not found");
     }
     // Build the active environment by collapsing the inheritence tree
-    envTransformer.transformEnvironment(sourceEnv);
-    activeGroup = envTransformer.getActiveEnvironment();
+    groupTransformer.transformEnvironment(sourceGroup);
+    activeGroup = groupTransformer.getActiveEnvironment();
 
     // for each job, build the job by collapsing the inheritence tree
-    for (String jobName : envTransformer.getIncludedJobs()) {
+    for (String jobName : groupTransformer.getIncludedJobs()) {
       jobTransformer.transformJob(Utils.findJob(sourcePipeline, jobName));
       activeJobs.add(jobTransformer.getActiveJob());
     }
