@@ -123,6 +123,10 @@ public class Resolver {
    * 1.1) if the pushed property does not exist on the current job create it.
    * 1.2) If exist and propagation set to none, stop propagation, but merge the value depending on the Merge setting.
    * 1.3) if exist and propagation set to Upstream/Downstream stop propagation.
+   * 2) Add add currently pushed properties to the set of further pushed properties.
+   * 3) Remove add properties found in step 1.2 and 1.3
+   * 4) Add all properties with a propagation in the same direction to the further pushed properties.This potentianlly
+   * re-adds some properties from step 1.3
    * @param pushedProperties
    * @param job
    * @param direction
