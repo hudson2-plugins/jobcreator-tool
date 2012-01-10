@@ -23,6 +23,31 @@ to the freemarker engine to provide the finished xml.
 Basic usage
 -----------
 
+The program is a standard java program which can be run using Java 6. The jar file downloaded is a shaded jar meaning 
+that the 3. party dependencies have been packed into the jar file. 
+
+When running the program the following input parameters are needed
+
+*   --input (-i) <pipeline file>: The pipeline file to use 
+*   --template <template dir>: The directory where all templates are stored. paths to templates are 
+    evaluated from here.
+*   --output (-o) <output directory>: All finished files will be written here
+*   --group (-g) <name>: The group of jobs to create config files for.
+
+Once the program is started it does the following steps:
+
+1.  Load the pipeline file
+2.  Build the effective group definition by resolving any inheritance
+3.  For each job included build the effective jobs based on the inheritance
+4.  For each job apply any global properties specified in the group from step 2
+5.  For each job apply any job specific properties specified in the group from step 2
+6.  For each job build datamodel from properties, call freemarker and save the xml
+
+The output is placed in the output directory and follows the format ${output.basedir}/${resolved.jobname}/config.xml. 
+This format allows you to specify a hudson jbos folder (${HUDSON_HOME}/jobs/) directly and hudson will pick up new jobs 
+when it reloads the configuration.
+
+
 Defining pipelines
 ------------------
 
