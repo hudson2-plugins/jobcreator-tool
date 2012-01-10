@@ -169,8 +169,30 @@ The tool also creates some special properties
 
 Advanced topics: Upstream/Downstream jobs
 -----------------------------------------
+The downstream notation on a job specification can be used to dynamically create a list of downstream/upstream jobs
+based on the active set of jobs being imported. A classical example is a deploy step in different environments. Assume 
+the following set of hudson jobs
 
+* Deploy trigger job (no-op job used to start the actual deploy jobs in sync and concurrently)
+* Deploy frontend
+* Deploy backend
+* Deploy stubs (Stubbing tool to stub away 3.party runtime dependencies to other systems)
+* test trigger job (called by join plugin from deploy trigger job)
 
+In most environments you only want the first 3 jobs, but in development you want them all. So you define a group for prod 
+like configuration and one for dev configuration. In the template for the deploy trigger job there is a xml fragment for 
+triggering the downstream jobs, and in the test trigger job there is a segment for copying deploy result from the 
+individual deploy jobs.
+
+If we don't use the downstream functionality, then we would need to define a property and manually ensure that it has
+the right list of jobs in each environment and there would be no consistency check by the tool.
+
+If we use the downstream job notation where deploy trigger list all 3 deploy jobs, and each of the deploy jobs list the 
+test trigger jobs, the template would be able to use the properties import.job.upstream + import.job.downstream knowing
+it only contained the jobs loaded this environment (group).
+
+*Note:* The downstream notation has no impact on which jobs are loaded or any affect on the templates except from where 
+they reference the special properties.
 
 Advanced topics: Properties propagation
 ----------------------------------------
