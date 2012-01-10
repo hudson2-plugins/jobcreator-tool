@@ -1,3 +1,8 @@
+DRAFT:
+======
+This is a draft, the tooll is not officially released yet.
+
+
 Overview
 ---------
 The purpose of this program is to allow Hudson administrators to script the creation of jobs. It does this by using 
@@ -133,7 +138,45 @@ Pipeline definitions are written in XML (more formats comming later)
 *  Propagation (Optional): how the property propergates to upstream/downstream jobs (See "Advanced usage")
 *  Merge (Optional): How properties are merged during propagation (See "Advanced usage")
 
+
 Using FreeMarker
 ----------------
+
+How you name the properties has an effect on how the datamodel is presented to the template. To put it simply 
+the property is split into element with every "." (dot character). Parent elements are added as hashes (java.util.Map) 
+and the leaf element is added as a string (java.lang.String). 
+
+This split does pose a restriction since a element cannot both be a String and an container i.e. the having both "git.repo" 
+and "git.repo.branch" is ilegal as repo would be both. On the other hand it helps in other situations e.g. image the these 
+properties are defined "scm.git.repo" + "scm.git.branch", now we can do <#if scm.git??>.... print git segnment </#if> or
+we can do other collection handling 
+
+When using import directive remember that the path is evaluated from the template root dir, not the location of the 
+current template.
+
+The tool also creates some special properties
+
+*   import.pipeline.name: Name of the pipeline as per pipeline xml
+*   import.group.name: Name of the group being imported
+*   import.jobs: comma separated list of all the jobs being imported
+*   import.job.name: Name of job as per pipeline definition
+*   import.job.resolvedname: Full name of the job as per the pattern defined for the group.
+*   import.job.upstream: comma separated list of jobs which are upstream from the current job based on the downstream
+    definition in the pipeline xml. Note only jobs being imported are included.
+*   import.job.downstream: comma separated list of jobs which are upstream from the current job based on the downstream
+    definition in the pipeline xml. Note only jobs being imported are included.
+*   import.time: Data and time in human readable format of when the import was run
+
+Advanced topics: Upstream/Downstream jobs
+-----------------------------------------
+
+
+
+Advanced topics: Properties propagation
+----------------------------------------
+
+
+Real world examples
+--------------------
 
 
