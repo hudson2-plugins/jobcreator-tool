@@ -4,79 +4,39 @@
    xsi:schemaLocation='hudsonci.jobcreator.v1 file:/mnt/nas/data/source-code/hudson-jobcreator/target/schemas/jobcreator-v1.xsd'>
   <name>example</name>
   <groups>
-    <group>
-      <name>dev-group</name>
-      <outputPattern>${pipeline}_${environment}_${job}</outputPattern>
+    <group name="dev-group" pattern="${pipeline}_${group}_${job}">
       <include>
         <job>job1</job>
       </include>
-      <properties>
-        <name>global</name>
-        <property name="my.property" >value1</property>
-        <property name="my.second">value2</property>
-      </properties>
+      <propertyset>
+        <property name="devgroup.prop" >value1</property>
+        <property name="devgroup.second">value2</property>
+      </propertyset>
     </group>
-    <group>
-      <name>dev1</name>
+    <group name="dev1">
       <inherit>
         <group>dev-group</group>
       </inherit>
       <include>
         <job>job2</job>
-        <job>job3</job>
       </include>
-      <properties>
-        <name>global</name>
-        <property name="env2-dsds" >dsdsad</property>
-      </properties>
-      <properties>
-        <name>job2</name>
-        <property name="env2-job-dsds" >dsdsad</property>
-      </properties>      
+      <propertyset>
+        <property name="g1.prop" >g1.prop is global</property>
+      </propertyset>
+      <propertyset job="job2">
+        <property name="g1.second">g1.seond is only job2</property>
+      </propertyset>      
     </group>
   </groups>
   <jobs>
-    <job>
-      <name>job1</name>
-      <template>template1.ftl</template>
+    <job name="job1" template="template1.ftl">
       <downstream>
         <job>job2</job>
       </downstream>
-      <properties>
-        <property name="prop1" propagation="downstream">original</property>
-        <property name="prop2" propagation="downstream">original2</property>
-        <property name="prop3" propagation="downstream">original3</property>
-        <property name="prop4" propagation="downstream">original4</property>
-        <property name="jobspec">myjob</property>
-        <property name="jobspec2" propagation="downstream">myjob</property>
-      </properties>
+      <propertyset>
+        <property name="prop.down" propagation="downstream">original</property>
+      </propertyset>
     </job>
-    <job>
-      <name>job2</name>
-      <template>template1.ftl</template>
-      <upstream>
-        <job>job1</job>
-      </upstream>
-      <downstream>
-        <job>job3</job>
-      </downstream>      
-      <properties>
-        <property name="prop1" propagation="skip">skipped</property>
-        <property name="prop2" merge="leave">left</property>
-        <property name="prop3" merge="prefix">job2</property>
-        <property name="prop4" merge="append">job2</property>
-        <property name="jobspec">myjob3</property>
-      </properties>
-    </job>
-    <job>
-      <name>job3</name>
-      <template>template1.ftl</template>
-      <upstream>
-        <job>job2</job>
-      </upstream>
-      <properties>
-        <property name="jobspec">myjob4</property>
-      </properties>
-    </job>    
+    <job  name="job2" template="template1.ftl" />
   </jobs>
 </ns1:pipeline>
