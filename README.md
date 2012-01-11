@@ -47,8 +47,9 @@ The output is placed in the output directory and follows the format ${output.bas
 This format allows you to specify a hudson jbos folder (${HUDSON_HOME}/jobs/) directly and hudson will pick up new jobs 
 when it reloads the configuration.
 
-Integration with Hudson
-------------------------
+If writing directly to the jbo directory is not an option the Hudson CLI or one of its REST interfaces can be used. 
+If using the CLI an good idea could be to wrap the creator tool and the CLI in a jython scripts so both tools are 
+run within a single JVM invocation. 
 
 
 Defining pipelines
@@ -245,8 +246,3 @@ regards to the order.
 
 *Note* Currently downstream propagated properties are evaluated before upstream, but that is a implementation detail,
 which you should not rely on
-
-Real world examples
---------------------
-
-
