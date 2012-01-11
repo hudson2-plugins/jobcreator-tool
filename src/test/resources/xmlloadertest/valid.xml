@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ns1:pipeline  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-   xmlns:ns1='hudsonci.jobcreator.v1'
-   xsi:schemaLocation='hudsonci.jobcreator.v1 file:/home/henrik/source-code/jobcreator-tool/application/target/schemas/jobcreator-v1.xsd'>
+<ns1:pipeline xmlns:ns1='hudsonci.jobcreator.v1' >
   <name>example</name>
   <groups>
     <group name="dev-group" pattern="${pipeline}_${environment}_${job}">

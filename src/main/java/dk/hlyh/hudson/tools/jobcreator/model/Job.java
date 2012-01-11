@@ -60,11 +60,12 @@ public class Job {
     return propertySet.createProperty(key);
   }
   
-  public void createProperty(Property original) {
+  public Property createProperty(Property original) {
     Property newProperty = propertySet.createProperty(original.getKey());
     newProperty.setMerging(original.getMerging());
     newProperty.setPropagation(original.getPropagation());
     newProperty.setValue(original.getValue());
+    return newProperty;
   }  
   
   public void removeProperty(String key) {

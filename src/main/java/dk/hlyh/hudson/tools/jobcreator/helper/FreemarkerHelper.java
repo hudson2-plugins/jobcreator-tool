@@ -36,7 +36,7 @@ public final class FreemarkerHelper {
     try {
       // merge with template
       String outputName = environment.getOutputPattern();
-      outputName = outputName.replace("${environment}", environment.getName());
+      outputName = outputName.replace("${group}", environment.getName());
       outputName = outputName.replace("${pipeline}", pipeline.getName());
       outputName = outputName.replace("${job}", job.getName());
       File jobDirectory = new File(outputDirectory, outputName);

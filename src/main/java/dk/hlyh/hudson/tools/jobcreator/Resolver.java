@@ -17,6 +17,7 @@ import dk.hlyh.hudson.tools.jobcreator.model.Propagation;
 import dk.hlyh.hudson.tools.jobcreator.model.Property;
 import dk.hlyh.hudson.tools.jobcreator.model.Group;
 import dk.hlyh.hudson.tools.jobcreator.model.Job;
+import dk.hlyh.hudson.tools.jobcreator.model.Merge;
 import dk.hlyh.hudson.tools.jobcreator.model.Pipeline;
 import dk.hlyh.hudson.tools.jobcreator.model.PropertySet;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class Resolver {
     List<Job> activeJobs = pipeline.getJobs();
 
     LOGGER.log(Level.INFO, "Active environment: {0}", activeGroup.getName());
-    LOGGER.log(Level.INFO, "Jobs to build: {0}", jobsAsString(activeJobs));
+    LOGGER.log(Level.INFO, "Jobs to build: {0}", jobsAsString(activeGroup,activeJobs));
 
     // Apply environment properties
     for (Job job : pipeline.getJobs()) {
@@ -87,10 +88,12 @@ public class Resolver {
       LOGGER.log(Level.INFO, "Writing job: {0}", job.getName());
       TemplateValuesBuilder builder = new TemplateValuesBuilder();
       builder.setProperty("import.pipeline.name", pipeline.getName());
-      builder.setProperty("import.env.name", arguments.getEnvironment());
-      builder.setProperty("import.jobs", jobsAsString(activeJobs));
-      builder.setProperty("import.job.upstream", jobsAsString(job.getUpstream()));
-      builder.setProperty("import.job.downstream", jobsAsString(job.getDownstream()));
+      builder.setProperty("import.group.name", arguments.getEnvironment());
+      builder.setProperty("import.jobs", jobsAsString(activeGroup,activeJobs));
+      builder.setProperty("import.job.name", job.getName());
+      builder.setProperty("import.job.resolvedname", resolveJobname(activeGroup,job));
+      builder.setProperty("import.job.upstream", jobsAsString(activeGroup,job.getUpstream()));
+      builder.setProperty("import.job.downstream", jobsAsString(activeGroup,job.getDownstream()));
       for (Property property : job.getProperties()) {
         builder.setProperty(property.getKey(), property.getValue());
       }
@@ -144,7 +147,9 @@ public class Resolver {
       Property currentProperty = job.getProperty(pushed.getKey());
       if (currentProperty == null) {
         LOGGER.log(Level.FINE, "Property does not exist");
-        job.createProperty(pushed);
+        Property createdProperty = job.createProperty(pushed);
+        createdProperty.setMerging(Merge.Replace);
+        createdProperty.setPropagation(Propagation.Continue);
         continue;
       }
 
@@ -205,14 +210,22 @@ public class Resolver {
     }
   }
 
-  private String jobsAsString(Collection<Job> jobs) {
+  private String jobsAsString(Group group,Collection<Job> jobs) {
     StringBuilder sb = new StringBuilder();
     for (Job job : jobs) {
       if (sb.length() > 0) {
         sb.append(',');
       }
-      sb.append(job.getName());
+      sb.append(resolveJobname(group,job));
     }
     return sb.toString();
+  }
+  
+  private String resolveJobname(Group group,Job job) {
+      String outputName = group.getOutputPattern();
+      outputName = outputName.replace("${group}", group.getName());
+      outputName = outputName.replace("${pipeline}", pipeline.getName());
+      outputName = outputName.replace("${job}", job.getName());
+      return outputName;
   }
 }

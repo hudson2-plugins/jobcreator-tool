@@ -15,5 +15,5 @@ public enum Merge {
     Skip,
     Replace,
     Append,       
-    Prefix    
+    Prefix
 }

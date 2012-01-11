@@ -30,8 +30,8 @@ public class Arguments {
   @Option(name = "--group", aliases="-g", required = true, usage = "Group to load")
   private String environment;
   
-  @Option(name = "--override", required = false, usage = "Personal override file")
-  private File overrideFile;
+//  @Option(name = "--override", required = false, usage = "Personal override file")
+//  private File overrideFile;
 
   @Option(name="--quiet")
   private boolean quiet;
@@ -54,9 +54,9 @@ public class Arguments {
     return outputDirectory;
   }
 
-  public File getOverrideFile() {
-    return overrideFile;
-  }
+//  public File getOverrideFile() {
+//    return overrideFile;
+//  }
 
   public File getInput() {
     return input;
@@ -98,9 +98,9 @@ public class Arguments {
     this.outputDirectory = outputDirectory;
   }
 
-  public void setOverrideFile(File overrideFile) {
-    this.overrideFile = overrideFile;
-  }
+//  public void setOverrideFile(File overrideFile) {
+//    this.overrideFile = overrideFile;
+//  }
 
   public void setQuiet(boolean quiet) {
     this.quiet = quiet;
