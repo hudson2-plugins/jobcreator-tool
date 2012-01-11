@@ -2,18 +2,18 @@ Overview
 ---------
 The purpose of this program is to allow Hudson administrators to script the creation of jobs. It does this by using 
 FreeMarker (http://freemarker.sourceforge.net/) templates combining those with the job definitions 
-found in a "pipeline" file and outputing config.xml files which can be read by Hudson.
+found in a "pipeline" file and outputting config.xml files which can be read by Hudson.
 
 The pipeline file contains two sets of entries namely "jobs" and "groups". 
 
-Jobs specify a template, properties and other metadata. Jobs can inherit from each other allowing for 
-usecases like specifying a generic builder job from that inherit project specific build jobs. The project specific 
+Jobs specify a template, properties and other meta-data. Jobs can inherit from each other allowing for 
+use cases like specifying a generic builder job from that inherit project specific build jobs. The project specific 
 build jobs needs then only specify scm location and polling.
 
-Group definea group of jobs, and can also hold properties. One use case for specifying properties in a group is to 
+Group define group of jobs, and can also hold properties. One use case for specifying properties in a group is to 
 have the groups match environments you like to deploy code in. It is very likely then dev environment deployment jobs
-need to run more often than a preprod job, and you could solve this by specifying diffent values for the timer trigger 
-in different groups.Another usecase could be that the "deploy service stubs" job should only be included in the development 
+need to run more often than a preprod job, and you could solve this by specifying different values for the timer trigger 
+in different groups.Another use case could be that the "deploy service stubs" job should only be included in the development 
 in environment (group). Groups can also be inherited allowing to specify common defaults.
 
 The freemarker templates can be written as the user see fit, as the only thing the creator tool does is resolve the 
@@ -53,7 +53,7 @@ Integration with Hudson
 
 Defining pipelines
 ------------------
-Pipeline definitions are written in XML (more formats comming later)
+Pipeline definitions are written in XML (more formats coming later)
 
 **Overall structure**
 
@@ -98,7 +98,7 @@ Pipeline definitions are written in XML (more formats comming later)
 *  downstream (Optional): List of jobs which are downstream from this job (inside hudson job flow). this value is 
    available to the template. See "Advanced usage" for when to use
 *  Propertyset (Optional): list of properties defined for this job
-*  Propagation (Optional): how the property propergates to upstream/downstream jobs (See "Advanced usage")
+*  Propagation (Optional): how the property propagates to upstream/downstream jobs (See "Advanced usage")
 *  Merge (Optional): How properties are merged during propagation (See "Advanced usage")
 
 **Group definition**
@@ -129,11 +129,11 @@ Pipeline definitions are written in XML (more formats comming later)
    pipeline, active group and active job respectivaly. if not specified an inherited value is expected
 *  inherit (Optional): Contains a list list of groups to inherit values from processed in the order given
 *  Include (Optional): List of jobs to include
-*  Exclude (Optional): List of jobs to exclude.The exlude takes precedence over include.However the handling of 
-   include/eclude happen on every step in the inheritance chain so if a parent has excluded a job a child can re-include it.
+*  Exclude (Optional): List of jobs to exclude.The exclude takes precedence over include.However the handling of 
+   include/exclude happen on every step in the inheritance chain so if a parent has excluded a job a child can re-include it.
 *  Propertyset (Optional): list of properties defined for this group. If job attribute is not present properties are applied 
    to all jobs, otherwise only to the job specified.
-*  Propagation (Optional): how the property propergates to upstream/downstream jobs (See "Advanced usage")
+*  Propagation (Optional): how the property propagates to upstream/downstream jobs (See "Advanced usage")
 *  Merge (Optional): How properties are merged during propagation (See "Advanced usage")
 
 
@@ -145,8 +145,8 @@ the property is split into element with every "." (dot character). Parent elemen
 and the leaf element is added as a string (java.lang.String). 
 
 This split does pose a restriction since a element cannot both be a String and an container i.e. the having both "git.repo" 
-and "git.repo.branch" is ilegal as repo would be both. On the other hand it helps in other situations e.g. image the these 
-properties are defined "scm.git.repo" + "scm.git.branch", now we can do <#if scm.git??>.... print git segnment </#if> or
+and "git.repo.branch" is illegal as repo would be both. On the other hand it helps in other situations e.g. image the these 
+properties are defined "scm.git.repo" + "scm.git.branch", now we can do <#if scm.git??>.... print git segment </#if> or
 we can do other collection handling 
 
 When using import directive remember that the path is evaluated from the template root dir, not the location of the 
@@ -195,7 +195,7 @@ they reference the special properties.
 Advanced topics: Properties propagation
 ----------------------------------------
 
-Progagation of properties is a way to specify a property on a jbo but also have it apply for upstream or downstream jobs.
+Propagation of properties is a way to specify a property on a job but also have it apply for upstream or downstream jobs.
 Assuming the following job chain A -> B -> C -> D and we have a job parameter for specifying full or partial deployment.
 In this case we could specify the following properties in the pipeline specification
 
@@ -214,14 +214,14 @@ The propagation attribute can take the following values
 the merging attribute is used when handling the "conflict" of propagation seeing the same property. It can
 take the following values:
 
-* skip: Skip this job and don't use the propergated value.
+* skip: Skip this job and don't use the propagated value.
 * replace (default): Use the propagated value instead of the specified value
 * append: append the propagated value to the end of the specified value with comma as a separator.
 * prefix: prepend the propagated value to the beginning of the specified value with comma as a separator.
 * list: build a comma separated list
 
 The best way to illustrate how this conflict handling is done is by example. Continuing from the previous example, let us
-assume that the propery is also specified for the B job, thus giving
+assume that the property is also specified for the B job, thus giving
 
 *   On the "D" job : <property name="deployment.type">partial</property>
 *   On the "C" job : <property propagation="upstream" name="deployment.type">full</property>
@@ -235,12 +235,12 @@ First thing to do is look at how the value of the propagation attribute on job B
 
 Secondly the merge value does changes the effective value of "deployment.type" on job be to:
 
-* skip: partial (the specified value on job B is not touced) 
+* skip: partial (the specified value on job B is not touched) 
 * replace: full (the specified value on job B is replaced)
 * append: partial,full (appends the propagated value)
 * prefix: full,partial (prepends the propagated value)
 
-*Note* if there is multiple paths from one job to another e.g. via a diamond shaped job graph, no gurantees are made with
+*Note* if there is multiple paths from one job to another e.g. via a diamond shaped job graph, no guarantees are made with
 regards to the order.
 
 *Note* Currently downstream propagated properties are evaluated before upstream, but that is a implementation detail,
