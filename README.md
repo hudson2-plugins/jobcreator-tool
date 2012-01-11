@@ -1,8 +1,3 @@
-DRAFT:
-======
-This is a draft, the tooll is not officially released yet.
-
-
 Overview
 ---------
 The purpose of this program is to allow Hudson administrators to script the creation of jobs. It does this by using 
@@ -51,6 +46,9 @@ Once the program is started it does the following steps:
 The output is placed in the output directory and follows the format ${output.basedir}/${resolved.jobname}/config.xml. 
 This format allows you to specify a hudson jbos folder (${HUDSON_HOME}/jobs/) directly and hudson will pick up new jobs 
 when it reloads the configuration.
+
+Integration with Hudson
+------------------------
 
 
 Defining pipelines
@@ -197,6 +195,56 @@ they reference the special properties.
 Advanced topics: Properties propagation
 ----------------------------------------
 
+Progagation of properties is a way to specify a property on a jbo but also have it apply for upstream or downstream jobs.
+Assuming the following job chain A -> B -> C -> D and we have a job parameter for specifying full or partial deployment.
+In this case we could specify the following properties in the pipeline specification
+
+*   On the "D" job : <property name="deployment.type">partial</property>
+*   On the "C" job : <property propagation="upstream" name="deployment.type">full</property>
+
+The propagation attribute can take the following values
+
+* none: indicate that if this property has been defined with a upstream/downstream propagation in another job, the 
+  propagation will stop at this job.
+* continue (default): indicate that if this property has been defined with a upstream/downstream propagation 
+  in another job, the  propagation will continue.
+* upstream: indicate that this property should be propagated to all upstream jobs
+* downstream: indicate that this property should be propagated to all downstream jobs
+
+the merging attribute is used when handling the "conflict" of propagation seeing the same property. It can
+take the following values:
+
+* skip: Skip this job and don't use the propergated value.
+* replace (default): Use the propagated value instead of the specified value
+* append: append the propagated value to the end of the specified value with comma as a separator.
+* prefix: prepend the propagated value to the beginning of the specified value with comma as a separator.
+* list: build a comma separated list
+
+The best way to illustrate how this conflict handling is done is by example. Continuing from the previous example, let us
+assume that the propery is also specified for the B job, thus giving
+
+*   On the "D" job : <property name="deployment.type">partial</property>
+*   On the "C" job : <property propagation="upstream" name="deployment.type">full</property>
+*   On the "B" job : <property propagation="????" merge="????" name="deployment.type">partial</property> 
+
+First thing to do is look at how the value of the propagation attribute on job B changes things.
+
+* upstream or downstream: The current propagation from "C" job is stopped before any merging is done
+* none: the propagation from "C" is stopped but property is merged according to the merge value
+* continue: the propagation from "C" will continue to job "A" and the property is merged according to the merge value
+
+Secondly the merge value does changes the effective value of "deployment.type" on job be to:
+
+* skip: partial (the specified value on job B is not touced) 
+* replace: full (the specified value on job B is replaced)
+* append: partial,full (appends the propagated value)
+* prefix: full,partial (prepends the propagated value)
+
+*Note* if there is multiple paths from one job to another e.g. via a diamond shaped job graph, no gurantees are made with
+regards to the order.
+
+*Note* Currently downstream propagated properties are evaluated before upstream, but that is a implementation detail,
+which you should not rely on
 
 Real world examples
 --------------------
