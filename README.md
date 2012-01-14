@@ -1,6 +1,6 @@
 Quick Access:
-* [Download](downloads)
-* [Wiki with more information](wiki)
+* [Download](https://github.com/hudson-plugins/jobcreator-tool/downloads)
+* [Wiki with more information](https://github.com/hudson-plugins/jobcreator-tool/wiki)
 
 
 Overview
