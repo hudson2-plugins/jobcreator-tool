@@ -1,3 +1,8 @@
+Quick Access:
+* [Download](downloads)
+* [Wiki with more information](wiki)
+
+
 Overview
 ---------
 The purpose of this program is to allow Hudson administrators to script the creation of jobs. It does this by using 
