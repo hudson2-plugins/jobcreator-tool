@@ -20,17 +20,17 @@ import dk.hlyh.hudson.tools.jobcreator.model.Job;
 import dk.hlyh.hudson.tools.jobcreator.model.Merge;
 import dk.hlyh.hudson.tools.jobcreator.model.Pipeline;
 import dk.hlyh.hudson.tools.jobcreator.model.PropertySet;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Resolver {
 
   private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+  private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm zz");
+  
   private final Arguments arguments;
   private final Pipeline pipeline;
 
@@ -83,10 +83,14 @@ public class Resolver {
       }
     }
 
+    Date importTime= new Date();
+    String importTimeFormatted = sdf.format(importTime);
     // Loop all jobs and and build the template model
     for (Job job : activeJobs) {
       LOGGER.log(Level.INFO, "Writing job: {0}", job.getName());
       TemplateValuesBuilder builder = new TemplateValuesBuilder();
+      builder.setProperty("import.time.timestamp",""+importTime.getTime());
+      builder.setProperty("import.time.text",""+importTimeFormatted);
       builder.setProperty("import.pipeline.name", pipeline.getName());
       builder.setProperty("import.group.name", arguments.getEnvironment());
       builder.setProperty("import.jobs", jobsAsString(activeGroup,activeJobs));
