@@ -28,7 +28,7 @@ public class Arguments {
   private File outputDirectory;
   
   @Option(name = "--group", aliases="-g", required = true, usage = "Group to load")
-  private String environment;
+  private String group;
   
 //  @Option(name = "--override", required = false, usage = "Personal override file")
 //  private File overrideFile;
@@ -47,7 +47,7 @@ public class Arguments {
   }
 
   public String getEnvironment() {
-    return environment;
+    return group;
   }
 
   public File getOutputDirectory() {
@@ -87,7 +87,7 @@ public class Arguments {
   }
 
   public void setEnvironment(String environment) {
-    this.environment = environment;
+    this.group = environment;
   }
 
   public void setInputFormat(InputFormat inputFormat) {

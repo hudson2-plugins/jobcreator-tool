@@ -14,7 +14,10 @@ import dk.hlyh.hudson.tools.jobcreator.helper.LogFacade;
 import dk.hlyh.hudson.tools.jobcreator.input.xml.XmlLoader;
 import dk.hlyh.hudson.tools.jobcreator.helper.LogFormatter;
 import dk.hlyh.hudson.tools.jobcreator.input.yaml.YamlLoader;
+import dk.hlyh.hudson.tools.jobcreator.model.Job;
 import dk.hlyh.hudson.tools.jobcreator.model.Pipeline;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,7 +54,7 @@ public class Program {
    * Main entry point for Jython based scritps.
    * @throws ImportException thrown if an error occurs
    */
-  public static void run(Arguments arguments) throws ImportException {
+  public static List<String> run(Arguments arguments) throws ImportException {
     // configure log level
     Logger rootLogger = Logger.getLogger("");
     if (arguments.isQuiet()) {
@@ -87,8 +90,12 @@ public class Program {
         throw new ImportException("Inputformat '" + arguments.getInputFormat() + "' not yet supported");
     }
     Resolver resolver = new Resolver(arguments, pipeline);
-    resolver.resolve();
-    
+    List<Job> jobs = resolver.resolve();
+    List<String> jobNames = new ArrayList<String>();
+    for (Job job : jobs) {
+      jobNames.add(job.getName());
+    }
     LogFacade.info("Program completed");
+    return jobNames;
   }
 }

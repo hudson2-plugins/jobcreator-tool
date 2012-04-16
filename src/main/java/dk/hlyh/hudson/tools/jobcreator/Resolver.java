@@ -45,7 +45,7 @@ public class Resolver {
     this.pipeline = pipeline;
   }
 
-  public void resolve() throws ImportException {
+  public List<Job> resolve() throws ImportException {
 
     FreemarkerHelper.setupFreemarker(arguments.getTemplateDirectory());
     Group activeGroup = pipeline.getGroup();
@@ -105,6 +105,7 @@ public class Resolver {
       FreemarkerHelper.writeJob(arguments.getOutputDirectory(), job, activeGroup, builder, pipeline);
       LOGGER.log(Level.INFO, "Completed job: {0}", job.getName());
     }
+    return activeJobs;
   }
 
   private void pushUpstream(Map<String, Property> pushedProperties, Job job) {

@@ -52,8 +52,10 @@ public final class FreemarkerHelper {
       template.process(templateValues.getValues(), out);
       out.close();
     } catch (TemplateException ex) {
+      ex.printStackTrace();
       throw new ImportException("Could not process job " + job.getName(), ex);
     } catch (IOException ex) {
+      ex.printStackTrace();
       throw new ImportException("Could not process job " + job.getName(), ex);
     }
   }
